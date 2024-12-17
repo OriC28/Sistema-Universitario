@@ -1,0 +1,184 @@
+body{
+    box-sizing: border-box;
+    display: grid;
+    min-height: 100dvh;
+    grid-template-rows: auto 1fr auto;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+                Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    margin: 0;
+}
+
+/*HEADER*/
+header{
+    display: grid;
+    align-items: center;
+    grid-template-columns: repeat(2, 0fr);
+    justify-content: space-between;
+    background-color: #243C60;
+}
+
+/*COLOCANDO A LOS HIJOS DE HEADER*/
+header>div, h2, label, button{
+    margin: 10px;
+}
+
+/*CONTENEDOR DE TEXTO Y LOGO ADMIN*/
+.container-admin{
+    display: grid;
+    align-items: center;
+    grid-template-columns: repeat(3, 0fr);
+    color: #fff;
+}
+
+.container-admin>label{
+    font-size: 20px;
+}
+
+/*BOTÓN PARA CERRAR SESIÓN*/
+#button-logout{
+    font-size: 15px;
+    border-radius: 30px;
+    padding: 5px;
+    width: 150px;
+    margin: 20px;
+}
+
+/*CONTENEDOR CIRCULAR PARA EL LOGO ADMIN*/
+#container-img{
+    display: grid;
+    background: #fff;
+    border-radius: 50%;
+    width: 70px;
+    height: 55px;
+    margin: 5px;
+    justify-content: center;
+    /*REDIMENSIÓN DEL LOGO*/
+    img{
+        width: 50px;
+        height: 50px;
+    }
+}
+/*FONDO GRIS PARA EL MAIN*/
+main{
+    background-color: #C4CBD3;
+}
+
+/*CONTENEDOR PARA EL NOMBRE DEL ESTUDIANTE Y SU CÉDULA*/
+.student-data{
+    display: grid;
+    justify-self: center;
+    align-items: center;
+    margin-top: 20px;
+    width: 90%;
+    grid-template-columns: repeat(2, 1fr);
+}
+/*CONTENEDOR PARA EL NOMBRE DEL ESTUDIANTE Y LA FLECHA BACK*/
+.container-name{
+    display: flex;
+    justify-items: center;
+    grid-template-columns: repeat(2, 0.3fr);
+    margin: 0px 10px 0px 0px;
+    column-gap: 10px;
+}
+/*CEDULA DEL ESTUDIANTE*/
+p{
+    font-size: 15px;
+    justify-self: end;
+    margin: 0px 10px 0px 0px;
+}
+
+/*SEPARADOR ENTRE EL CONTENEDOR DE DATOS Y DE NOTAS*/
+.separator{
+    display: flex;
+    justify-self: center;
+    width: 90%;
+    height: 4px;
+    background-color: #243C60;
+}
+
+/*-----APARTADO DEL INGRESO DE LAS NOTAS-----*/
+
+/*CONTENEDOR PARA EL NOMBRE DE LA MATERIA Y DEL DOCENTE*/
+.container-subject{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    width: 50%;
+    margin: 0px 0px 0px 75px;
+    font-size: 15px;
+}
+/*CONTENEDOR PARA EL FORMULARIO*/
+.container-form{
+    display: grid;
+    background-color: #fff;
+    margin: 0px 20px 30px 20px;
+    border-radius: 20px;
+}
+/*CONTENEDOR PARA LOS LABELS E INPUTS*/
+.container-notes{
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    margin: 20px;
+}
+
+/*CONTENEDOR INDIVIDUAL PARA CADA CORTE*/
+.field{
+    display: grid;
+    grid-template-columns: repeat(2, 0.1fr);
+    margin: 5px;
+    font-size: 15px;
+}
+/*ESTILO PARA LOS INPUTS DE LAS NOTAS*/
+input[type=number]{
+    border-radius: 30px;
+    background-color: #C4CBD3;
+    width: 100px;
+    font-size: 15px;
+}
+/*ESTILO PARA EL BOTÓN DE GUARDAR*/
+input[type=submit]{
+    display: grid;
+    justify-self: end;
+    margin: 20px;
+    width: 110px;
+    padding: 5px;
+    border-radius: 30px;
+    font-size: 15px;
+    color: #fff;
+    background-color: #243C60;
+}
+/*ESTILO PARA EL LABEL DE NOTA DEFINITIVA*/
+#def-label{
+    margin: 20px;
+    font-size: 15px;   
+}
+
+/*ANIMACIÓN PARA EL BOTÓN DE CERRAR SESIÓN*/
+#button-logout:hover{
+    cursor: pointer;
+    background-color:#C4CBD3;
+}
+/*ANIMACIÓN PARA EL BOTÓN DE GUARDAR*/
+input[type=submit]:hover{
+    cursor: pointer;
+    background-color: #1b2f4e;
+}
+
+/*FOOTER*/
+footer{
+    background-color: #243C60;
+    text-align: center;
+    font-size: 15px;
+    padding: 5px;
+    color: #fff;
+}
+
+/*----ESTILOS PARA LAS VALIDACIONES----*/
+input[type=number]:invalid{
+    background-color: #ffdddd;
+    border-color: #ffdddd;
+}
+
+input[type=number]:valid{
+    background-color: #ddffdd;
+    border-color: #ddffdd;
+}

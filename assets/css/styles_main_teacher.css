@@ -1,0 +1,52 @@
+table{
+    width: 90%;
+    justify-self: center;
+    margin: 20px;
+    border: 1px solid rgb(54, 54, 54);
+    border-spacing: 0;
+}
+
+th, td{
+    width: 25%;
+    text-align: center;
+    vertical-align: center;
+    border: 1px solid rgb(54, 54, 54);
+}
+
+.options{
+    display: grid;
+    grid-template-columns: repeat(2, 0fr);
+    justify-self: center;
+}
+
+.options>button{
+    padding: 8px;
+    border-radius: 30px;
+    border: 1px solid #000000;
+    cursor: pointer;
+}
+
+.text-button{
+    text-decoration: none;
+    color: #fff;
+    font-weight: 500;
+}
+
+.add-button:hover{
+    background-color: #002f6d;
+}
+.edit-button:hover{
+    background-color:#076a3c;
+}
+
+thead{
+    background-color: #243C60;
+    color: #fff;
+}
+
+.add-button{
+    background-color: #243C60;
+}
+.edit-button{
+    background-color: #038C4C;
+}
