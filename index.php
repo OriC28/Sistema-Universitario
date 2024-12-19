@@ -2,14 +2,9 @@
 
 include("controllers/UserController.php");
 include("controllers/TeacherController.php");
-include("model/UserTest.php");
-
-$user = new User();
-#$user->insertUser();
-#$user->personalData();
-#$user->updateEmail("orianacolina@gmail.com");
-$user->updatePhone("04246438485");
-
+include("controllers/NoteController.php");
+include("controllers/TableController.php");
+include("controllers/addNotesController.php");
 
 $controller = $_GET['controller'];
 $method = $_GET['action'];

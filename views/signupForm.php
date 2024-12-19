@@ -13,7 +13,6 @@
     <main>
         <div class="container">
             <form action="" method="post" id="form">
-
                 <div class="container-flex">
                     <div class="children-container-flex">
                         <div class="div-inputs-data">

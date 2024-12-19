@@ -1,19 +1,27 @@
+
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="../assets/styles_edit_add_notes.css"/>
+    <link rel="stylesheet" href="../assets/css/styles_edit_add_notes.css"/>
     <title>Agregar calificaciones</title>
 </head>
 <body>
-    <!--HEADER -->
-    <?php require_once "header.php";?>
-
+    <!--HEADER-->
+    <header>
+        <div class="container-admin">
+            <h2>DOCENTES</h2>
+            <div id="container-img">
+                <img src="../assets/icons/admin.png" alt="admin" />
+            </div>
+            <label for="">ADMIN</label>
+        </div>
+        <input id="button-logout" type="button" value="Cerrar Sesión">
+    </header>
     <!--CONTENIDO-->
     <main>
-        <?php require_once "sub_header.php";?>
+        <?php require_once "templates/sub_header.php";?>
 
         <!--SEPARADOR-->
         <div class="separator"><p></p></div>
@@ -25,24 +33,24 @@
         </div>
         <!--INGRESO DE LAS NOTAS POR CORTE-->
         <div class="container-form">
-            <form action="">
+            <form action="../index.php?controller=note&action=setNotes" method="post">
                 <div class="container-notes">
                     <!--CORTES-->
                     <div class="field">
                         <label for="">Corte I</label>
-                        <input type="number" pattern="[0-9]{1,2}" step="0.1" min="0" max="20" name="corte1" id="" required>
+                        <input type="number" pattern="[0-9]{1,2}" step="0.1" min="0" max="20" name="corte1" required>
                     </div>
                     <div class="field">
                         <label for="">Corte II</label>
-                        <input type="number" pattern="[0-9]{1,2}" step="0.1" min="0" max="20" name="corte2" id="" required>
+                        <input type="number" pattern="[0-9]{1,2}" step="0.1" min="0" max="20" name="corte2" required>
                     </div>
                     <div class="field">
                         <label for="">Corte III</label>
-                        <input type="number" pattern="[0-9]{1,2}" step="0.1" min="0" max="20" name="corte3" id="" required>
+                        <input type="number" pattern="[0-9]{1,2}" step="0.1" min="0" max="20" name="corte3" required>
                     </div>
                     <div class="field">
                         <label for="">Corte IV</label>
-                        <input type="number" pattern="[0-9]{1,2}" step="0.1" min="0" max="20" name="corte4" id="" required>
+                        <input type="number" pattern="[0-9]{1,2}" step="0.1" min="0" max="20" name="corte4" required>
                     </div>
                 </div>
                 <!--BOTÓN PARA ENVIAR EL FORMULARIO-->

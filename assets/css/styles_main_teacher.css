@@ -19,15 +19,11 @@ th, td{
     justify-self: center;
 }
 
-.options>button{
+.options>form>button{
     padding: 8px;
     border-radius: 30px;
     border: 1px solid #000000;
     cursor: pointer;
-}
-
-.text-button{
-    text-decoration: none;
     color: #fff;
     font-weight: 500;
 }

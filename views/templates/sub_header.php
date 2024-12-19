@@ -1,7 +1,17 @@
+<?php 
+
+session_start();
+if(!empty($_SESSION['cedula']) && !empty($_SESSION['name'])){
+    $cedula = htmlspecialchars($_SESSION['cedula']);
+    $name = htmlspecialchars($_SESSION['name']);
+}
+
+?>
+
 <!--SUB-HEADER-->
 <div class="student-data">
     <div class="container-name">
-        <h2>Genesys José Alvarado Marín</h2>
+        <h2><?php echo $name; ?></h2>
     </div>
-    <p>V-30846853</p>
+    <p>V-<?php echo $cedula; ?></p>
 </div>

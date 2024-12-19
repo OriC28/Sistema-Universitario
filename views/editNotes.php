@@ -17,17 +17,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../assets/styles_edit_add_notes.css">
+    <link rel="stylesheet" href="../assets/css/styles_edit_add_notes.css">
     <title>Editar calificaciones</title>
 </head>
 <body class=>
     <!--HEADER-->
-    <?php require_once "header.php";?>
+    <header>
+        <div class="container-admin">
+            <h2>DOCENTES</h2>
+            <div id="container-img">
+                <img src="../assets/icons/admin.png" alt="admin" />
+            </div>
+            <label for="">ADMIN</label>
+        </div>
+        <input id="button-logout" type="button" value="Cerrar Sesión">
+    </header>
 
     <!--CONTENIDO-->
     <main>
         <!--SUB-HEADER-->
-        <?php require_once "sub_header.php";?>
+        <?php require_once "templates/sub_header.php";?>
 
         <!--SEPARADOR-->
         <div class="separator"><p></p></div>
