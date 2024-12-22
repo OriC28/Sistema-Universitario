@@ -70,5 +70,12 @@ class NoteModel{
             error_log($th->getMessage());
             die("Ocurrió un error al procesar su solicitud. Inténtelo más tarde.");
         }
-    }   
+    }  
+    
+    public function getNotes(){
+        $notes_user = new NoteModel();
+        $cedula = htmlspecialchars($_SESSION['cedula']);
+        $notes = $notes_user->getNotes($cedula);
+        require_once "views/editNotes.php";
+    }
 }

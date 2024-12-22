@@ -3,6 +3,7 @@
 class recoveryRowData{
     private $cedula;
     private $name;
+    private $conn;
 
     public function __construct(string $cedula, string $name){
         $this->cedula = $cedula;
