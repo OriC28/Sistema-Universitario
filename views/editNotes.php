@@ -1,23 +1,10 @@
-<?php 
-    # NOTAS OBTENIDAS DE LA "BASE DE DATOS"
-    $_SESSION['corte1'] = 20;
-    $_SESSION['corte2'] = 20;
-    $_SESSION['corte3'] = 10;
-    $_SESSION['corte4'] = 20;
-
-    # SUMA TOTAL DE LOS CORTES
-    $total = $_SESSION['corte1'] + $_SESSION['corte2'] + $_SESSION['corte3'] + $_SESSION['corte4'];
-
-    # DEFINITIVA OBTENIDA DE LA "BASE DE DATOS"
-    $_SESSION['definitiva'] = $total/4; 
-?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../assets/css/styles_edit_add_notes.css">
+    <link rel="stylesheet" href="assets/css/styles_edit_add_notes.css">
     <title>Editar calificaciones</title>
 </head>
 <body class=>
@@ -26,7 +13,7 @@
         <div class="container-admin">
             <h2>DOCENTES</h2>
             <div id="container-img">
-                <img src="../assets/icons/admin.png" alt="admin" />
+                <img src="assets/icons/admin.png" alt="admin" />
             </div>
             <label for="">ADMIN</label>
         </div>
@@ -36,8 +23,7 @@
     <!--CONTENIDO-->
     <main>
         <!--SUB-HEADER-->
-        <?php require_once "templates/sub_header.php";?>
-
+        <?php require_once "views/templates/sub_header.php"; ?>
         <!--SEPARADOR-->
         <div class="separator"><p></p></div>
 
@@ -48,7 +34,7 @@
         </div>
         <!--INGRESO DE LAS NOTAS POR CORTE-->
         <div class="container-form">
-            <form action="">
+            <form action="index.php?controller=note&action=updateNotes" method="post">
                 <div class="container-notes">
                     <!--CORTES-->
                     <div class="field">
@@ -69,7 +55,7 @@
                     </div>
                 </div>
                 <!--NOTA DEFINITIVA-->
-                <label id="def-label">Definitiva: <?php echo $_SESSION['definitiva'];?></label>
+                <label id="def-label">Definitiva: <?= $notes['nota_definitiva'] ?? "No definida";?></label>
                 
                 <!--BOTÓN PARA ENVIAR EL FORMULARIO-->
                 <input type="submit" value="Modificar">
@@ -79,32 +65,39 @@
     <script>
         // CAPTURA DE TODOS LOS INPUTS
         let inputs = document.querySelectorAll("div.field > input");
-        let sum_notes = 0;
-        // NOTAS EXTRAÍDAS DE LA "BASE DE DATOS"
-        let notes = [
-            <?php echo $_SESSION['corte1'];?>, <?php echo $_SESSION['corte2'];?>,
-            <?php echo $_SESSION['corte3'];?>, <?php echo $_SESSION['corte4'];?>
-        ];
+        let cortes = ["primer_corte", "segundo_corte", "tercer_corte", "cuarto_corte"];
+        let notes = <?php echo json_encode(array_map('intval', $notes)); ?>;
+        let sum_notes = 0;       
+
         // INSERTANDO LAS NOTAS EN LOS INPUTS
         inputs.forEach((input, index) => {
-            input.value = notes[index];
+            input.value = notes[cortes[index]];
         });        
-        // CAPTURA DE LAS NOTAS A MEDIDA QUE SE MODIFICAN
-        inputs.forEach(input => {
-            input.addEventListener('input', ()=>{
-                inputs.forEach((input) => {
-                    if(input.value){ // VERIFICAR LA EXISTENCIA DE LA NOTA EN EL INPUT
-                        let note = parseInt(input.value);
-                        if(note>=0 && note<=20){
-                            sum_notes+= parseInt(note);  // REALIZAR SUMATORIA TOTAL DE LAS NUEVAS NOTAS
-                        }
+       
+        const calculateDefinitiveNote = () =>{
+            let sumNotes = 0;
+            let countValid = 0;
+             // CAPTURA DE LAS NOTAS A MEDIDA QUE SE MODIFICAN
+            inputs.forEach((input) =>{
+                if(input.value){ // VERIFICAR LA EXISTENCIA DE LA NOTA EN EL INPUT
+                    let note = parseFloat(input.value);
+                    if(!isNaN(note) && note>=0 && note<=20){
+                        sumNotes+= note;  // REALIZAR SUMATORIA TOTAL DE LAS NUEVAS NOTAS
+                        countValid++;
                     }
-                });
-                document.getElementById("def-label").innerHTML = "Definitiva: "; // BORRAR LAS NOTAS ANTERIORES
-                document.getElementById("def-label").innerHTML = "Definitiva: " + sum_notes/4; // ESTABLECER LAS NOTAS MODIFICADAS
-                sum_notes = 0; // BORRAR LA SUMATORIA TOTAL PARA IR ACTUALIZANDO LA NOTA DEFINITIVA
+                }
             });
-        });  
+
+            let definitiva = countValid > 0 ? (sumNotes / countValid).toFixed(2) : 'No definida';
+            document.getElementById("def-label").textContent = `Definitiva: ${definitiva}`;
+        };
+
+        inputs.forEach(input => {
+            input.addEventListener('input', calculateDefinitiveNote);
+        });
+
+        calculateDefinitiveNote(); // CALCULAR AL CARGAR LA PÁGINA
+
     </script>
     <!--FOOTER-->
     <footer>Copyright 2024 - Hecho por la demencia</footer>

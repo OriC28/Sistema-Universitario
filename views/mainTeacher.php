@@ -1,12 +1,13 @@
+<?php include("config/keys.php");?>
+
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="assets/css/styles_edit_add_notes.css" />
-    <link rel="stylesheet" href="assets/css/styles_main_teacher.css" />
+    <link rel="stylesheet" href="assets/css/styles_edit_add_notes.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="assets/css/styles_main_teacher.css?v=<?php echo time(); ?>" />
 
     <title>Inicio</title>
 </head>
@@ -41,44 +42,29 @@
             </thead>
             <tbody>
             <?php
-                foreach ($students as $index => $data) {
-                    printf(
-                        '<tr>
-                            <td>%s</td>
-                            <td>%s</td>
-                            <td>%s</td>
-                            <td>%s</td>
-                            <td>
-                                <div class="options">
-                                    <form action="index.php?controller=addNotes&action=compareData" method="POST" style="display:inline;">
-                                        <input type="hidden" name="cedula" value="%s">
-                                        <input type="hidden" name="name" value="%s">
-                                        <button class="add-button" type="submit">Agregar</button>
-                                    </form>
-                                    <form action="views/editNotes.php" method="POST" style="display:inline;">
-                                        <input type="hidden" name="cedula" value="%s">
-                                        <input type="hidden" name="name" value="%s">
-                                        <button class="edit-button" type="submit">Editar</button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>',
-                        htmlspecialchars($data['cedula']),
-                        htmlspecialchars($data['primer_apellido']) . " " . htmlspecialchars($data['segundo_apellido']),
-                        htmlspecialchars($data['primer_nombre']) . " " . htmlspecialchars($data['segundo_nombre']),
-                        htmlspecialchars($data['correo_electronico']),
-                        htmlspecialchars($data['cedula']),
-                        htmlspecialchars($data['primer_nombre']) . " " . htmlspecialchars($data['segundo_nombre']) . " " . htmlspecialchars($data['primer_apellido']) . " " . htmlspecialchars($data['segundo_apellido']),
-                        htmlspecialchars($data['cedula']),
-                        htmlspecialchars($data['primer_nombre']) . " " . htmlspecialchars($data['segundo_nombre']) . " " . htmlspecialchars($data['primer_apellido']) . " " . htmlspecialchars($data['segundo_apellido'])
-                    );
-                }
-            ?>
+                foreach ($students as $index => $data):
+                    $name =  htmlspecialchars(trim($data['primer_nombre_estudiante'])) . " " . htmlspecialchars(trim($data['segundo_nombre_estudiante'])) . " " 
+                            . htmlspecialchars(trim($data['primer_apellido_estudiante'])) . " " . htmlspecialchars(trim($data['segundo_apellido_estudiante']));
+                    $cedula = (int) trim($data['cedula']);
+                    $name_encrypted = base64_encode(openssl_encrypt($name, "aes-256-cbc", $key, 0, $iv));
+                    $ci_encrypted = base64_encode(openssl_encrypt($cedula, "aes-256-cbc", $key, 0, $iv));
+                ?>
+                <tr>
+                    <td><?php echo htmlspecialchars(trim($data['cedula']));?></td>
+                    <td><?php echo htmlspecialchars(trim($data['primer_apellido_estudiante'])) . " " . htmlspecialchars(trim($data['segundo_apellido_estudiante']));?></td>
+                    <td><?php echo htmlspecialchars(trim($data['primer_nombre_estudiante'])) . " " . htmlspecialchars(trim($data['segundo_nombre_estudiante']));?></td>
+                    <td><?php echo htmlspecialchars(trim($data['correo_electronico']));?></td>
+                    <td>
+                        <div class="options">
+                            <button class="add-button" type="button"><a href="index.php?controller=studentData&action=getRowData&site=addnotes&id=<?= urlencode($ci_encrypted);?>&n=<?= urlencode($name_encrypted); ?>">Agregar</a></button>
+                            <button class="edit-button" type="button"><a href="index.php?controller=studentData&action=getRowData&site=editnotes&id=<?= urlencode($ci_encrypted);?>&n=<?= urlencode($name_encrypted); ?>">Editar</a></button>
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach;?>
             </tbody>
         </table>
     </main>
-    <script src="views/test.js"></script>
     <footer>Copyright 2024 - Hecho por la demencia</footer>
 </body>
-
 </html>

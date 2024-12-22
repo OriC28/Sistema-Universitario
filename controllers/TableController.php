@@ -9,7 +9,7 @@ class tableController{
     }
 
     public function getAllStudents(){
-        $model_students = new tableModel();
+        $model_students = new TableModel();
         $students = $model_students->getAllStudents();
         require_once 'views/mainTeacher.php';
     }

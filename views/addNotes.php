@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="../assets/css/styles_edit_add_notes.css"/>
+    <link rel="stylesheet" href="assets/css/styles_edit_add_notes.css"/>
     <title>Agregar calificaciones</title>
 </head>
 <body>
@@ -13,7 +13,7 @@
         <div class="container-admin">
             <h2>DOCENTES</h2>
             <div id="container-img">
-                <img src="../assets/icons/admin.png" alt="admin" />
+                <img src="assets/icons/admin.png" alt="admin" />
             </div>
             <label for="">ADMIN</label>
         </div>
@@ -21,8 +21,8 @@
     </header>
     <!--CONTENIDO-->
     <main>
-        <?php require_once "templates/sub_header.php";?>
-
+        <!--SUB-HEADER-->
+        <?php require_once "views/templates/sub_header.php"; ?>
         <!--SEPARADOR-->
         <div class="separator"><p></p></div>
 
@@ -33,7 +33,7 @@
         </div>
         <!--INGRESO DE LAS NOTAS POR CORTE-->
         <div class="container-form">
-            <form action="../index.php?controller=note&action=setNotes" method="post">
+            <form action="index.php?controller=note&action=setNotes" method="post">
                 <div class="container-notes">
                     <!--CORTES-->
                     <div class="field">

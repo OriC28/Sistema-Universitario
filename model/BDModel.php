@@ -27,9 +27,9 @@ class BDModel{
 		try{
 			if($this->conn == null){
 				$this->conn = new PDO($this->dsn, $this->username, $this->password, $this->options);
-		}
+			}
 		}catch(PDOException $e){
-			die("Connection failed: ". $e->getMessage());
+			die("La conexión ha fallado: ". $e->getMessage());
 		}
 		return $this->conn;
 	}

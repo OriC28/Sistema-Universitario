@@ -4,10 +4,10 @@ include("controllers/UserController.php");
 include("controllers/TeacherController.php");
 include("controllers/NoteController.php");
 include("controllers/TableController.php");
-include("controllers/addNotesController.php");
+include("controllers/StudentDataController.php");
 
-$controller = $_GET['controller'];
-$method = $_GET['action'];
+$controller =  htmlspecialchars(trim($_GET['controller']));
+$method     =  htmlspecialchars(trim($_GET['action']));
 
 $controllerName = ucfirst($controller) . 'Controller';
 $controllerPath = "controllers/"."$controllerName".".php";
@@ -19,11 +19,12 @@ if(file_exists($controllerPath)){
     if(method_exists($controllerInstance, $method)){
         $controllerInstance->$method();
     }else{
-        echo "No se encontró el método $method";
+        http_response_code(404);
+        die("Error 404: Ruta no encontrada.");
     }
-
 }else{
-    echo "No se encontró el controlador $controllerName";
+    http_response_code(404);
+    die("Error 404: Ruta no encontrada.");
 }
 
 

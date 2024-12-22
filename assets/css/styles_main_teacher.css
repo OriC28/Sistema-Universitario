@@ -19,13 +19,18 @@ th, td{
     justify-self: center;
 }
 
-.options>form>button{
+.options>button{
     padding: 8px;
     border-radius: 30px;
     border: 1px solid #000000;
     cursor: pointer;
+}
+
+a{
+    text-decoration: none;
     color: #fff;
     font-weight: 500;
+    cursor: pointer;
 }
 
 .add-button:hover{
