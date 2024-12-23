@@ -10,19 +10,19 @@ class StudentDataModel{
         $this->conn = $this->conn_object->connect();
     }
 
-    public function getRowData(string $cedula, string $name){
+    public function getRowData(string $cedula){
         try{
             # PREPARANDO LA CONSULTA Y SUS PARÁMETROS
             $sql = "SELECT * FROM estudiantes WHERE cedula = :cedula";
             
             $cursor = $this->conn->prepare($sql);
             $cursor->bindParam(':cedula', $cedula, PDO::PARAM_INT);
+            
             # VERIFICAR SI SE REALIZÓ LA CONSULTA
             if($cursor->execute()){
                 # VERIFICAR SI EXISTE EL ESTUDIANTE CON LA CÉDULA SUMINISTRADA
                 if($cursor->fetch(PDO::FETCH_ASSOC)){
-                        $_SESSION['cedula'] = $cedula;
-                        $_SESSION['name'] = $name;
+                    return true;
                 }else{
                     http_response_code(404);
                     die("Error 404: Ruta no encontrada.");

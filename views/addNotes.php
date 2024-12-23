@@ -54,7 +54,7 @@
                     </div>
                 </div>
                 <!--BOTÓN PARA ENVIAR EL FORMULARIO-->
-                <input type="submit" value="Guardar">
+                <input type="submit"  name="submit" value="Guardar">
             </form>
         </div>
     </main>

@@ -58,7 +58,7 @@
                 <label id="def-label">Definitiva: <?= $notes['nota_definitiva'] ?? "No definida";?></label>
                 
                 <!--BOTÓN PARA ENVIAR EL FORMULARIO-->
-                <input type="submit" value="Modificar">
+                <input type="submit" name="submit" value="Modificar">
             </form>
         </div>
     </main>

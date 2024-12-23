@@ -24,9 +24,11 @@ class StudentDataController{
             if(strlen(trim($cedula)) == 7 || strlen(trim($cedula)) == 8){
                 if(filter_var($cedula,FILTER_VALIDATE_INT)){
                     $cedula = trim($cedula);
+                    $_SESSION['cedula'] = $cedula;
                      # VALIDAR NOMBRE COMPLETO Y SITIO AL CUAL REDIRIGIR
                     if(preg_match('/^[a-zA-Zs áéíóúÁÉÍÓÚñÑ]+\s/', $name) && preg_match('/^[a-zA-Zs]/', $site_redirect)){
                         $name = trim(htmlspecialchars($name));
+                        $_SESSION['name'] = $name;
                         $site_redirect = trim(htmlspecialchars($site_redirect));
                     }
                 }
@@ -39,21 +41,19 @@ class StudentDataController{
             exit();
         }
         $notes_user = new NoteModel();
-        
-        if($site_redirect == "editnotes"){
-
-            $notes = $notes_user->getNotes($cedula);
-            require_once "views/editNotes.php";
-            require_once "views/templates/sub_header.php";
-
-        }elseif($site_redirect == "addnotes"){
-            
-            require_once "views/addNotes.php";
-            require_once "views/templates/sub_header.php";
-        }
-
         $model = new StudentDataModel();
-        $model->getRowData($cedula, $name);
+
+        if($model->getRowData($cedula)){
+            if($site_redirect == "editnotes"){
+                $notes = $notes_user->getNotes($cedula);
+                require_once "views/editNotes.php";
+                require_once "views/templates/sub_header.php";
+    
+            }elseif($site_redirect == "addnotes"){
+                require_once "views/addNotes.php";
+                require_once "views/templates/sub_header.php";
+            }
+        }
     }
 }
 
