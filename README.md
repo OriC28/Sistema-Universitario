@@ -2,7 +2,7 @@
 Proyecto de lenguaje de programación III (ayúdennos)
 ## Funcionamiento del sistema
 El sistema ha sido creado empleando el patrón **MVC (Model-View-Controller)** para una organización más clara del proyecto y una mejor distribución de las responsabilidades entre el equipo de desarrollo.
-Asimismo, el sistema maneja dos roles, docente y estudiante, y para cada uno existen funcionalidades específicas. Por otro lado, cuenta con un sistema básico de autenticación independiente para cada rol, además de un registro y la recuperación de la contraseña exclusivamente por parte del estudiante mediante unas preguntas de seguridad que son establecidad previamente durante el registro en el sistema.
+Asimismo, el sistema maneja dos roles, docente y estudiante. Para cada uno existen funcionalidades específicas, sin embargo cuentan con un sistema básico de autenticación independiente para cada rol, además de un registro y la recuperación de la contraseña exclusivamente para el apartado estudiantil mediante tres preguntas de seguridad que son establecidas previamente durante el registro en el sistema.
 
 ## Apartado del docente
 
