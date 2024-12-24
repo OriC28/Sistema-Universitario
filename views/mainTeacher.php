@@ -31,6 +31,7 @@
 
         <!--TABLA DE DATOS-->
         <table>
+            <!--ENCABEZADO-->
             <thead>
                 <tr>
                     <th>Cédula</th>
@@ -41,6 +42,7 @@
                 </tr>
             </thead>
             <tbody>
+                <!-- DATOS INDIVIDUALES DE LOS ESTUDIANTES REGISTRADOS-->
             <?php
                 foreach ($students as $index => $data):
                     $name =  htmlspecialchars(trim($data['primer_nombre_estudiante'])) . " " . htmlspecialchars(trim($data['segundo_nombre_estudiante'])) . " " 

@@ -1,6 +1,6 @@
 <?php
 
-require_once './model/UserModel.php';
+require_once './model/UserModel (prueba inicial).php';
 
 class UserController{
     public function signup(){

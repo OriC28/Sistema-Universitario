@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Este archivo sirve para proporcionar los parámetros necesarios al modelo BDModel a la hora de realizar una conexión a la base de datos.
+ */
 return [
     "host" => "localhost",
     "port" => "3306",

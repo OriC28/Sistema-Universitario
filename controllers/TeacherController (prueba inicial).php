@@ -1,6 +1,6 @@
 <?php
 
-require_once './model/TeacherModel.php';
+require_once './model/TeacherModel (prueba inicial).php';
 
 class TeacherController{
     public function login_teacher(){

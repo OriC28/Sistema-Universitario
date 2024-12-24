@@ -1,5 +1,9 @@
 <?php
 
+/**
+* Modelo para manipular las calificaciones de los estudiantes.
+*
+*/
 class NoteModel{
    private $id_materia;
    private $conn;
@@ -11,56 +15,94 @@ class NoteModel{
         $config = include("./config/config.php");
         $conn_object = new BDModel($config);
         $this->conn = $conn_object->connect();
-    }
 
-    public function existsCedula(string $cedula){
-        $sql = "SELECT * FROM calificaciones WHERE cedula = :cedula";
-        $cursor = $this->conn->prepare($sql);
-        $cursor->bindParam(':cedula', $cedula, PDO::PARAM_INT);
-        if($cursor->execute()){
-            if(!$cursor->fetch(PDO::FETCH_ASSOC)){
-                return false;
-            }
+        if(!$this->conn){
+            throw new Exception("No se pudo establecer la conexión a la base de datos.", 1);  
         }
-        return true;
     }
-
-    public function validateCedula(string $cedula){
+     /**
+    * Valida la cédula de acuerdo a la longitud y si es un valor entero.
+    *
+    * @return int si la cédula cumple lo necesario para considerarse válida
+    * @param int $cedula identificador único del estudiante
+    * @throws Exception Si la cédula no es válida
+    */
+    public function validateCedula(int $cedula): int{
         if(strlen($cedula) == 7 || strlen($cedula) == 8){
             if(filter_var($cedula, FILTER_VALIDATE_INT)){
                 $cedula = (int)$cedula;
                 return $cedula;
             }
         }else{
-            throw new Exception("Cédula inválida", 1);
+            throw new Exception("Cédula inválida.", 1);
         }
     }
+    /**
+    * Verifica la existencia de la cédula del estudiante en la tabla Calificaciones.
+    *
+    * @return boolean true si la cédula es encontrada en la base de datos 
+    * @param int $cedula identificador único del estudiante
+    */
+    public function existsCedula(int $cedula): bool{
+        $sql = "SELECT * FROM calificaciones WHERE cedula = :cedula";
+        $cursor = $this->conn->prepare($sql);
+        $cursor->bindParam(':cedula', $cedula, PDO::PARAM_INT);
+        if($cursor->execute()){
+            if($cursor->fetch(PDO::FETCH_ASSOC)){
+                return true;
+            }
+        }
+        return false;
+    }
+    /**
+    * Valida y sanitiza cada nota del estudiante de forma individual.
+    *
+    * @return float si la nota cumple lo necesario para considerarse válida
+    * @param float $note nota del estudiante
+    * @throws Exception Si alguna nota no es de tipo flotante o numérica y si no se encuentra en el rango establecido
+    */
+    private function validateSingleNote(float $note): float{
+        $note_sanitized = filter_var($note, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 
-    public function validateNotes(array $notes=[]){
-        $total = 0;
-        $clean_notes = [];
+        if($note_sanitized === false || !is_numeric($note_sanitized)){
+            throw new Exception("Las notas no son válidas.", 1);
+        }
+
+        $note = (float)$note_sanitized;
+
+        if($note<0 || $note>20){
+            throw new Exception("Las notas deben estar en el rango de 0 a 20 puntos.", 1); 
+        }
+        return $note;
+    }
+    /**
+    * Valida las notas en su totalidad y llama al método validateSingleNote para obtener las notas limpias.
+    * Si todo es correcto calculará la nota definitiva del estudiante también.
+    *
+    * @return array las notas por corte y la nota definitiva ya validadas y sanitizadas
+    * @param array $notes notas por corte académico del estudiante
+    * @throws Exception Si las notas están incompletas
+    */
+    public function validateNotes(array $notes=[]): array{
         if(count($notes)!=4){
             throw new Exception("Las notas no están completas. En caso de no 
                                 contener notas en un corte coloque 0.", 1);
-        }  
-        foreach($notes as $note){
-            $note_sanitized = filter_var($note, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-            if($note_sanitized === false || !is_numeric($note_sanitized)){
-                throw new Exception("Las notas no son válidas.", 1);
-            }
+        } 
+        $clean_notes = array_map([$this, 'validateSingleNote'], $notes);
 
-            $note = (float)$note_sanitized;
-            if($note<0 || $note>20){
-                throw new Exception("Las notas deben estar en el rango de 0 a 20 puntos.", 1); 
-            }
-            $total+=$note;
-            $clean_notes[] = $note;
-        }
-        $definitiva = $total/4;
+        $definitiva = array_sum($notes)/4;
         return ['notes' => $clean_notes, 'definitiva' => $definitiva];
     }
 
-    public function setNotes(string $cedula, array $notes = []){
+    /**
+    * Registra las notas del estudiante en la base de datos.
+    *
+    * @return void 
+    * @param int $cedula identificador único del estudiante
+    * @param array $notes notas por corte académico del estudiante
+    * @throws Exception Si el estudiante ya cuenta con notas registradas o si las notas no pudieron ser agregadas
+    */
+    public function setNotes(int $cedula, array $notes = []): void{
         try{
             $cedula = $this->validateCedula($cedula);
             $notes = $this->validateNotes($notes);
@@ -72,31 +114,35 @@ class NoteModel{
                     throw new Exception("El estudiante ya tiene las notas cargadas.", 1);
                 }
 
-                $sql = "INSERT INTO calificaciones VALUES (:cedula, :id_materia, :corte1, 
-                        :corte2, :corte3, :corte4, :definitiva);";
+                $sql = "INSERT INTO calificaciones VALUES (:cedula, :id_materia, :primer_corte, 
+                        :segundo_corte, :tercer_corte, :cuarto_corte, :definitiva);";
                                 
                 $cursor = $this->conn->prepare($sql);
                 $cursor->bindParam(':cedula', $cedula);
                 $cursor->bindParam(':id_materia', $this->id_materia);
-                $cursor->bindParam(':corte1', $notes['notes'][0]);
-                $cursor->bindParam(':corte2', $notes['notes'][1]);
-                $cursor->bindParam(':corte3', $notes['notes'][2]);
-                $cursor->bindParam(':corte4', $notes['notes'][3]);
+                $cursor->bindParam(':primer_corte', $notes['notes'][0]);
+                $cursor->bindParam(':segundo_corte', $notes['notes'][1]);
+                $cursor->bindParam(':tercer_corte', $notes['notes'][2]);
+                $cursor->bindParam(':cuarto_corte', $notes['notes'][3]);
                 $cursor->bindParam('definitiva', $notes['definitiva']);
                                 
-                if($cursor->execute()){
-                    echo "Las notas se agregaron con éxito";
-                }else{
+                if(!$cursor->execute()){
                     throw new Exception( "Las notas no pudieron ser agregadas.", 1);
                 }
+                echo "Las notas se agregaron con éxito";
             }
-        }catch(\Throwable $th) {
-            #error_log($th->getMessage());
-            die("Error. ".$th->getMessage());
+        }catch(\PDOException $e){
+            throw new Exception("Error al intentar registrar las notas: " . $e->getMessage(), $e->getCode());
         }
     }   
-
-    public function getNotes(string $cedula){
+    /**
+    * Captura todas las notas de un estudiante de acuerdo a su cédula en la base de datos.
+    *
+    * @return array|false las notas del estudiante o falso si no se encontró una coincidencia
+    * @param int $cedula identificador único del estudiante
+    * @throws Exception Si no es posible obtener las notas o si la cédula no es correcta
+    */
+    public function getNotes(int $cedula): array|false{
         try{
             $cedula = $this->validateCedula($cedula);
 
@@ -105,22 +151,26 @@ class NoteModel{
                 
                 $sql = "SELECT primer_corte, segundo_corte, tercer_corte, cuarto_corte, 
                     nota_definitiva FROM calificaciones WHERE cedula = :cedula;";
-           
-                $cursor = $this->conn->prepare($sql);
-                $cursor->bindParam(':cedula', $cedula);
 
-                if($cursor->execute()){
-                    return $cursor->fetch(PDO::FETCH_ASSOC);
-                }else{
-                    return [];
-                }
+                $cursor = $this->conn->prepare($sql);
+                $cursor->bindParam(':cedula', $cedula, PDO::PARAM_INT);
+                $cursor->execute();
+                
+                return $cursor->fetch(PDO::FETCH_ASSOC);
             }
-        }catch (\Throwable $th) {
-            die("Error: ".$th->getMessage());
+        }catch(\PDOException $e){
+            throw new Exception("Error al obtener las notas: " . $e->getMessage(), $e->getCode());
         }
     }
-
-    public function updateNotes(string $cedula, $notes=[]){
+    /**
+    * Actualiza las notas de un estudiante de acuerdo a su cédula en la base de datos.
+    *
+    * @return void
+    * @param int $cedula identificador único del estudiante
+    * @param array $notes notas que reemplazarán a las que están en la base de datos
+    * @throws Exception Si la cédula y notas no son válidas o si existe un error al actualizar las notas
+    */
+    public function updateNotes(int $cedula, array $notes=[]): void{
         try{
             $cedula = $this->validateCedula($cedula);
             $notes = $this->validateNotes($notes);
@@ -128,25 +178,24 @@ class NoteModel{
             # VERIFICAR SI LA CÉDULA Y LAS NOTAS SON VALIDAS
             if($cedula && $notes){
 
-                $sql = "UPDATE calificaciones SET primer_corte = :corte1, segundo_corte = :corte2, tercer_corte = :corte3, 
-                    cuarto_corte = :corte4, nota_definitiva = :definitiva WHERE cedula = :cedula";
+                $sql = "UPDATE calificaciones SET primer_corte = :primer_corte, segundo_corte = :segundo_corte, 
+                        tercer_corte = :tercer_corte, cuarto_corte = :cuarto_corte, nota_definitiva = :definitiva WHERE cedula = :cedula";
             
                 $cursor = $this->conn->prepare($sql);
-                $cursor->bindParam(':corte1', $notes['notes'][0]);
-                $cursor->bindParam(':corte2', $notes['notes'][1]);
-                $cursor->bindParam(':corte3', $notes['notes'][2]);
-                $cursor->bindParam(':corte4', $notes['notes'][3]);
+                $cursor->bindParam(':primer_corte', $notes['notes'][0]);
+                $cursor->bindParam(':segundo_corte', $notes['notes'][1]);
+                $cursor->bindParam(':tercer_corte', $notes['notes'][2]);
+                $cursor->bindParam(':cuarto_corte', $notes['notes'][3]);
                 $cursor->bindParam('definitiva', $notes['definitiva']);
                 $cursor->bindParam(':cedula', $cedula);
         
-                if($cursor->execute()){
-                    echo "Las notas se actualizaron con éxito.";
-                }else{
+                if(!$cursor->execute()){
                     throw new Exception( "Las notas no pudieron ser actualizadas.", 1);
                 }
+                echo "Las notas se actualizaron con éxito.";
             }
-        }catch (\Throwable $th) {
-            die("Error: ".$th->getMessage());
+        }catch(\PDOException $e){
+            throw new Exception("Error al actualizar las notas: " . $e->getMessage(), $e->getCode());
         }
     }
 }
