@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
-
+<?php define('BASE_URL', '/Sistema-Universitario/');?>
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="../assets\css\style_student.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="assets\css\style_student.css?v=<?php echo time(); ?>" />
     <title>Perfil</title>
 </head>
 
@@ -17,22 +17,17 @@
     <!-- MENÚ -->
     <aside>
         <div class="function">
-            <span><img src="../assets\icons\perfil.png" alt="icon-profile"/></span>
-            <a href="profileStudent.php">Perfil</a>
+            <span><img src="assets\icons\perfil.png" alt="icon-profile"/></span>
+            <a href="<?= BASE_URL?>index.php?controller=profileStudent&action=getStudentData">Perfil</a>
         </div>
         <div class="function">
-            <span><img src="../assets\icons\agregar.png" alt="icon-personal-data"/></span>
-            <a href="contactData.php">Agregar datos de contacto</a>
+            <span><img src="assets\icons\agregar.png" alt="icon-personal-data"/></span>
+            <a href="<?= BASE_URL?>views\contactData.php">Agregar datos de contacto</a>
         </div>
         <div class="function">
-            <span><img src="../assets\icons\calificaciones.png" alt="icon-calificaciones"/></span>
-            <a href="viewNotes.php">Ver calificaciones</a>
+            <span><img src="assets\icons\calificaciones.png" alt="icon-calificaciones"/></span>
+            <a href="<?= BASE_URL?>index.php?controller=viewerNote&action=viewNotes">Ver calificaciones</a>
         </div>
-        <div class="function">
-            <span><img src="../assets\icons\modificar.png" alt="icon-recovery"/></span>
-            <a href="recoveryquestionStudent.php">Modificar preguntas de seguridad</a>
-        </div>
-        
     </aside>
     <!-- --CONTENIDO-- -->
     <main>
@@ -43,11 +38,11 @@
                 <div class="separator"></div>
                 <div class="profile">
                 <div class="icon">
-                    <img id="profile-main" src="../assets\icons\perfil1.png" alt="icon-profile">
+                    <img id="profile-main" src="assets\icons\perfil1.png" alt="icon-profile">
                 </div>
                 <div class="name">
-                    <h2>Genesys Jose</h2>
-                    <h2>Alvarado Marin</h2>
+                    <h2><?= htmlspecialchars($data['primer_nombre_estudiante'])." ".htmlspecialchars($data['segundo_nombre_estudiante']);?></h2>
+                    <h2><?= htmlspecialchars($data['primer_apellido_estudiante'])." ".htmlspecialchars($data['segundo_apellido_estudiante']);?></h2>
                 </div>
                 </div>
                 <div class="separator"></div>
@@ -56,18 +51,17 @@
             <!-- BLOQUE BLANCO CON SU RESPECTIVO CONTENIDO -->
             <div class="div-white">
                 <div class="data"> 
-                    <h3>Cédula:</h3><label for="">V-30846853</label>
+                    <h3>Cédula:</h3><label for=""><?= htmlspecialchars($data['cedula']); ?></label>
                 </div>
                 <div class="data"> 
-                    <h3>Teléfono:</h3><label for="">0412-0646612</label>
+                    <h3>Teléfono:</h3><label for=""><?= htmlspecialchars($data['telefono']);?></label>
                 </div>
                 <div class="data"> 
                     <h3>Correo electrónico:</h3>
                     <label for="">
-                        genesys@gmail.com
+                        <?= htmlspecialchars($data['correo_electronico']);?>
                     </label>
                 </div>
-                
             </div>
         </div>
     </main>

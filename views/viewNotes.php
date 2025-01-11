@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
-
+<?php define('BASE_URL', '/Sistema-Universitario/');?>
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="assets/css/style_student.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="assets\css\style_student.css?v=<?php echo time(); ?>" />
     <title>Calificaciones</title>
 </head>
 
@@ -14,18 +14,19 @@
         <input class="button-logout" type="button" value="Cerrar Sesión">
     </header>
 
-    <aside>
+     <!-- MENÚ -->
+     <aside>
         <div class="function">
-            <span><img src="assets/icons/perfil.png" alt="icon-profile"/></span>
-            <a href="profileStudent.php">Perfil</a>
+            <span><img src="assets\icons\perfil.png" alt="icon-profile"/></span>
+            <a href="<?= BASE_URL?>index.php?controller=profileStudent&action=getStudentData">Perfil</a>
         </div>
         <div class="function">
-            <span><img src="assets/icons/agregar.png" alt="icon-personal-data"/></span>
-            <a href="contactData.php">Agregar datos de contacto</a>
+            <span><img src="assets\icons\agregar.png" alt="icon-personal-data"/></span>
+            <a href="<?= BASE_URL?>views/contactData.php">Agregar datos de contacto</a>
         </div>
         <div class="function">
-            <span><img src="assets/icons/calificaciones.png" alt="icon-calificaciones"/></span>
-            <a href="viewNotes.php">Ver calificaciones</a>
+            <span><img src="assets\icons\calificaciones.png" alt="icon-calificaciones"/></span>
+            <a href="<?= BASE_URL?>index.php?controller=viewerNote&action=viewNotes">Ver calificaciones</a>
         </div>
     </aside>
 
@@ -62,11 +63,11 @@
                         </div>
                         <div class="notes">
                             <label for="">Definitiva</label>
-                            <h1><?= round(
+                            <h1><?= htmlspecialchars(round(
                                 ($notes['primer_corte'] + 
                                  $notes['segundo_corte'] + 
                                  $notes['tercer_corte'] + 
-                                 $notes['cuarto_corte']) / 4, 2) ?></h1>
+                                 $notes['cuarto_corte']) / 4, 2)); ?></h1>
                         </div>
                     <?php else: ?>
                         <p>No hay calificaciones disponibles.</p>

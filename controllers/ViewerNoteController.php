@@ -8,8 +8,6 @@
 *
 */
 
-#include('./model/NoteModel.php');
-
 /**
 * Controlador conectado al modelo NoteModel. Permite obtener las notas del estudiante que inició sesión.
 *

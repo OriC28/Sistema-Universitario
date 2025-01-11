@@ -75,13 +75,12 @@ class NoteModel{
         }
         return $note;
     }
-    /**
-    * Valida las notas en su totalidad y llama al método validateSingleNote para obtener las notas limpias.
-    * Si todo es correcto calculará la nota definitiva del estudiante también.
+   /**
+    * Valida y sanitiza las notas del estudiante.
     *
-    * @return array las notas por corte y la nota definitiva ya validadas y sanitizadas
-    * @param array $notes notas por corte académico del estudiante
-    * @throws Exception Si las notas están incompletas
+    * @param array $notes notas del estudiante
+    * @return array con las notas validadas y la nota definitiva
+    * @throws Exception Si las notas no están completas o si alguna nota no es válida
     */
     public function validateNotes(array $notes=[]): array{
         if(count($notes)!=4){
@@ -95,13 +94,12 @@ class NoteModel{
     }
 
     /**
-    * Registra las notas del estudiante en la base de datos.
-    *
-    * @return void 
-    * @param int $cedula identificador único del estudiante
-    * @param array $notes notas por corte académico del estudiante
-    * @throws Exception Si el estudiante ya cuenta con notas registradas o si las notas no pudieron ser agregadas
-    */
+     * Registra las notas de un estudiante en la base de datos.
+     * 
+     * @param int $cedula identificador único del estudiante
+     * @param array $notes notas del estudiante
+     * @throws Exception Si la cédula y notas no son válidas o si existe un error al registrar las notas
+     */
     public function setNotes(int $cedula, array $notes = []): void{
         try{
             $cedula = $this->validateCedula($cedula);

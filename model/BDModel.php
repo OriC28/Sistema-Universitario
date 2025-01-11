@@ -15,7 +15,7 @@ class BDModel{
 	private $dsn;
 	private $options;
 
-	public function __construct($config){
+	public function __construct(array $config){
 
 		$this->existsConnectionParams($config);
 

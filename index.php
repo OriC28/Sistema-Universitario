@@ -7,8 +7,10 @@
 #include("controllers/TeacherController (prueba inicial).php");
 include("controllers/NoteController.php");
 include("controllers/TableController.php");
-include("controllers/StudentDataController.php");
+include("controllers/TeacherMethodController.php");
 include("controllers/ViewerNoteController.php");
+include("controllers/ProfileStudentController.php");
+include("controllers/ContactDataController.php");
 
 try{
     /** 
