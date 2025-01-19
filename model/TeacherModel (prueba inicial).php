@@ -7,6 +7,7 @@ class TeacherModel{
     private $cedula;
     private $password;
     private $rol;
+    private $config;
 
     public function __construct(string $cedula, string $password){
         $this->cedula = $cedula;
