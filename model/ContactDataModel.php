@@ -8,7 +8,8 @@ class ContactDataModel{
 
     public function __construct(){
         
-        $config = require_once("./config/config.php");
+        # ESTABLECIENDO CONEXIÓN A LA BASE DE DATOS
+        $config = include("./config/config.php");
         $this->conn_object = new BDModel($config);
         $this->conn = $this->conn_object->connect();
 
@@ -24,10 +25,13 @@ class ContactDataModel{
      * @throws Exception si el número de teléfono no es válido
      */
     private function validatePhone(string $phone){
-        if(!is_numeric($phone) || strlen($phone) != 11 || !preg_match('/^04(12|14|24|26)/', $phone)){
+        if(empty($phone)){
+            throw new Exception("El número de teléfono es requerido.", 1);
+        }
+        if(!is_numeric($phone) || !preg_match('/^04(12|14|24|26)\d{7}$/', $phone)){
             throw new Exception("Número de teléfono inválido.", 1);
         }
-        return $phone;
+        return trim($phone);
     }
     /**
      * Valida el correo electrónico ingresado.
@@ -37,10 +41,13 @@ class ContactDataModel{
      * @throws Exception si el correo electrónico no es válido
      */
     private function validateEmail(string $email){
-        $emailSanitized = filter_var($email, FILTER_SANITIZE_EMAIL);
-        if(!filter_var($emailSanitized, FILTER_VALIDATE_EMAIL)){
+        if(empty($email)){
+            throw new Exception("El correo electrónico es requerido.", 1);
+        }
+        if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
             throw new Exception("Correo electrónico inválido.", 1);
         }
+        $emailSanitized = filter_var($email, FILTER_SANITIZE_EMAIL);
         return $emailSanitized;
     }
     /**

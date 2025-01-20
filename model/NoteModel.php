@@ -11,7 +11,7 @@ class NoteModel{
     public function __construct(){
         $this->id_materia = 1;
 
-        # Estableciendo la conexión a la base de datos
+        # ESTABLECIENDO CONEXIÓN A LA BASE DE DATOS
         $config = include("./config/config.php");
         $conn_object = new BDModel($config);
         $this->conn = $conn_object->connect();
@@ -54,27 +54,7 @@ class NoteModel{
         }
         return false;
     }
-    /**
-    * Valida y sanitiza cada nota del estudiante de forma individual.
-    *
-    * @return float si la nota cumple lo necesario para considerarse válida
-    * @param float $note nota del estudiante
-    * @throws Exception Si alguna nota no es de tipo flotante o numérica y si no se encuentra en el rango establecido
-    */
-    private function validateSingleNote(float $note): float{
-        $note_sanitized = filter_var($note, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 
-        if($note_sanitized === false || !is_numeric($note_sanitized)){
-            throw new Exception("Las notas no son válidas.", 1);
-        }
-
-        $note = (float)$note_sanitized;
-
-        if($note<0 || $note>20){
-            throw new Exception("Las notas deben estar en el rango de 0 a 20 puntos.", 1); 
-        }
-        return $note;
-    }
    /**
     * Valida y sanitiza las notas del estudiante.
     *
@@ -86,10 +66,15 @@ class NoteModel{
         if(count($notes)!=4){
             throw new Exception("Las notas no están completas. En caso de no 
                                 contener notas en un corte coloque 0.", 1);
-        } 
-        $clean_notes = array_map([$this, 'validateSingleNote'], $notes);
+        }
+        foreach($notes as $note){
+            if($note<0 || $note>20){
+                throw new Exception("Las notas deben estar en el rango de 0 a 20 puntos.", 1); 
+            }
+        }
 
-        $definitiva = array_sum($notes)/4;
+        $clean_notes = filter_var_array($notes, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+        $definitiva = array_sum($clean_notes)/4;
         return ['notes' => $clean_notes, 'definitiva' => $definitiva];
     }
 

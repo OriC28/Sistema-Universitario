@@ -65,7 +65,9 @@
     <script>
         // CAPTURA DE TODOS LOS INPUTS
         let inputs = document.querySelectorAll("div.field > input");
+        // CAMPOS DE LAS NOTAS
         let cortes = ["primer_corte", "segundo_corte", "tercer_corte", "cuarto_corte"];
+        // NOTAS DE LOS CORTES OBTENIDAS DE LA BASE DE DATOS
         let notes = <?php echo json_encode(array_map('intval', $notes)); ?>;
         let sum_notes = 0;       
 
@@ -73,30 +75,37 @@
         inputs.forEach((input, index) => {
             input.value = notes[cortes[index]];
         });        
-       
+        /**
+         * Calcula la nota definitiva a medida que se modifican las notas de los cortes.
+         * 
+         */
         const calculateDefinitiveNote = () =>{
             let sumNotes = 0;
             let countValid = 0;
              // CAPTURA DE LAS NOTAS A MEDIDA QUE SE MODIFICAN
             inputs.forEach((input) =>{
-                if(input.value){ // VERIFICAR LA EXISTENCIA DE LA NOTA EN EL INPUT
+                // VALIDAR QUE EL CAMPO NO ESTÉ VACÍO
+                if(input.value){ 
                     let note = parseFloat(input.value);
+                    // VALIDAR QUE LA NOTA ESTÉ ENTRE 0 Y 20
                     if(!isNaN(note) && note>=0 && note<=20){
-                        sumNotes+= note;  // REALIZAR SUMATORIA TOTAL DE LAS NUEVAS NOTAS
+                        // REALIZAR SUMATORIA TOTAL DE LAS NUEVAS NOTAS
+                        sumNotes+= note;  
                         countValid++;
                     }
                 }
             });
-
+            // CALCULAR LA NOTA DEFINITIVA Y MOSTRARLA EN EL LABEL
             let definitiva = countValid > 0 ? (sumNotes / countValid).toFixed(2) : 'No definida';
             document.getElementById("def-label").textContent = `Definitiva: ${definitiva}`;
         };
-
+        // EVENTO QUE SE EJECUTA CADA VEZ QUE SE MODIFICA UNA NOTA
         inputs.forEach(input => {
             input.addEventListener('input', calculateDefinitiveNote);
         });
-
-        calculateDefinitiveNote(); // CALCULAR AL CARGAR LA PÁGINA
+        
+        // CALCULAR AL CARGAR LA PÁGINA
+        calculateDefinitiveNote(); 
 
     </script>
     <!--FOOTER-->

@@ -13,6 +13,13 @@ include("controllers/ProfileStudentController.php");
 include("controllers/ContactDataController.php");
 
 try{
+    $error_message = "Error 404. Ruta no encontrada.";
+
+    # Verificar si se han enviado los parámetros controller y action por la URL
+    if(!isset($_GET['controller']) || !isset($_GET['action']) && empty($_GET['controller']) || empty($_GET['action'])){
+        http_response_code(404);
+        throw new Exception($error_message, 1);
+    }
     /** 
     * variable para obtener el controlador enviado como parámetro en la URL
     * @var string controlador 
@@ -42,7 +49,7 @@ try{
     # Verificar la existencia de la ruta para incluir el controlador ubicado en ella.
     if(!file_exists($controllerPath)){
         http_response_code(404);
-        throw new Exception("Error 404. Ruta no encontrada.", 1);
+        throw new Exception($error_message, 1);
     } 
 
     require_once $controllerPath;
@@ -53,7 +60,7 @@ try{
     # Verificar si existe el método dentro del controlador
     if(!method_exists($controllerInstance, $method)){
         http_response_code(404);
-        throw new Exception("Error 404. Ruta no encontrada.", 1);
+        throw new Exception($error_message, 1);
     }
 
     $controllerInstance->$method(); # Llamar al método en caso de que exista

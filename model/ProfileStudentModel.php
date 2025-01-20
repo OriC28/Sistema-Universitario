@@ -8,10 +8,14 @@ class ProfileStudentModel{
 
     public function __construct(){
 
-        # INICIALIZANDO LA CONEXIÓN
+        # ESTABLECIENDO CONEXIÓN A LA BASE DE DATOS
         $config = include("./config/config.php");
         $this->conn_object = new BDModel($config);
         $this->conn = $this->conn_object->connect();
+
+        if(!$this->conn){
+            throw new Exception("No se pudo establecer la conexión a la base de datos.", 1);  
+        }
     }
     /**
      * Obtiene los datos de un estudiante
@@ -26,6 +30,7 @@ class ProfileStudentModel{
             
             $cursor = $this->conn->prepare($sql);
             $cursor->bindParam(':cedula', $cedula, PDO::PARAM_INT);
+            
             # VERIFICAR SI SE REALIZÓ LA CONSULTA
             if(!$cursor->execute()){
                 throw new Exception("Datos no disponibles.", 1);  

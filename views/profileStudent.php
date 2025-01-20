@@ -41,8 +41,10 @@
                     <img id="profile-main" src="assets\icons\perfil1.png" alt="icon-profile">
                 </div>
                 <div class="name">
-                    <h2><?= htmlspecialchars($data['primer_nombre_estudiante'])." ".htmlspecialchars($data['segundo_nombre_estudiante']);?></h2>
-                    <h2><?= htmlspecialchars($data['primer_apellido_estudiante'])." ".htmlspecialchars($data['segundo_apellido_estudiante']);?></h2>
+                    <h2><?= htmlspecialchars($data['primer_nombre_estudiante']).
+                    " ".htmlspecialchars($data['segundo_nombre_estudiante']).
+                    " ".htmlspecialchars($data['primer_apellido_estudiante']).
+                    " ".htmlspecialchars($data['segundo_apellido_estudiante']);?></h2>
                 </div>
                 </div>
                 <div class="separator"></div>

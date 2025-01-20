@@ -50,6 +50,11 @@ class NoteController{
            throw new Exception("No se ha enviado ninguna petición.", 1);
         }
 
+        if(!is_numeric($_POST['corte1']) || !is_numeric($_POST['corte2']) || 
+        !is_numeric($_POST['corte3']) || !is_numeric($_POST['corte4'])){
+            throw new Exception("Las notas no son válidas.", 1);
+        }
+
         $corte1 = (float)htmlspecialchars($_POST['corte1']);
         $corte2 = (float)htmlspecialchars($_POST['corte2']);
         $corte3 = (float)htmlspecialchars($_POST['corte3']);

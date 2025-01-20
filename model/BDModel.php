@@ -16,7 +16,7 @@ class BDModel{
 	private $options;
 
 	public function __construct(array $config){
-
+		
 		$this->existsConnectionParams($config);
 
 		$this->host = $config['host'];

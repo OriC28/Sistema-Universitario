@@ -19,7 +19,10 @@ class ContactDataController extends ViewerNoteController{
         if($_SERVER['REQUEST_METHOD'] != 'POST' || !$_POST['submit']){
             throw new Exception("No se ha enviado ninguna petición.", 1);
         }
-        return ['phone' => $_POST['phone'], 'email' => $_POST['email']];
+        if(!isset($_POST['phone']) || !isset($_POST['email'])){
+            throw new Exception("Faltan datos en la petición.", 1);
+        }
+        return ['phone' => htmlspecialchars($_POST['phone']), 'email' => htmlspecialchars($_POST['email'])];
     }
     /**
      * Verifica la existencia de la cédula del estudiante en la tabla Calificaciones.

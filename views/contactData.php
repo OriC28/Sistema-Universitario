@@ -41,7 +41,7 @@
                 <form action="<?= BASE_URL?>index.php?controller=contactData&action=addContactData" method='post'>
                     <div class="data"> 
                         <h3>Teléfono:</h3>
-                        <input class="inputs-personal-data" type="number" min="0" name="phone" required>
+                        <input class="inputs-personal-data" type="tel" minlength="11" maxlength="11" name="phone" required>
                     </div>
                     <div class="data"> 
                         <h3>Correo electrónico:</h3>
