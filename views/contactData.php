@@ -19,10 +19,12 @@
             <span><img src="..\assets\icons\perfil.png" alt="icon-profile"/></span>
             <a href="<?= BASE_URL?>index.php?controller=profileStudent&action=getStudentData">Perfil</a>
         </div>
+        <div class="separator-menu"></div>
         <div class="function">
             <span><img src="..\assets\icons\agregar.png" alt="icon-personal-data"/></span>
             <a href="<?= BASE_URL?>views/contactData.php">Agregar datos de contacto</a>
         </div>
+        <div class="separator-menu"></div>
         <div class="function">
             <span><img src="..\assets\icons\calificaciones.png" alt="icon-calificaciones"/></span>
             <a href="<?= BASE_URL?>index.php?controller=viewerNote&action=viewNotes">Ver calificaciones</a>

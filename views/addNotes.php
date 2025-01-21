@@ -11,13 +11,10 @@
     <!--HEADER-->
     <header>
         <div class="container-admin">
-            <h2>DOCENTES</h2>
-            <div id="container-img">
-                <img src="assets/icons/admin.png" alt="admin" />
-            </div>
-            <label for="">ADMIN</label>
+            <h1>DOCENTES</>
+            
         </div>
-        <input id="button-logout" type="button" value="Cerrar Sesión">
+        <input class="button-logout" type="button" value="Cerrar Sesión">
     </header>
     <!--CONTENIDO-->
     <main>
@@ -28,8 +25,8 @@
 
         <!--DATOS DE LA MATERIA Y DOCENTE-->
         <div class="container-subject">
-            <h4>Materia: Programación</h4>
-            <h4>Docente: Carlos José Medina González</h4>
+            <h3>Materia: Programación</h3>
+            <h3>Docente: Carlos José Medina González</h3>
         </div>
         <!--INGRESO DE LAS NOTAS POR CORTE-->
         <div class="container-form">
@@ -37,24 +34,24 @@
                 <div class="container-notes">
                     <!--CORTES-->
                     <div class="field">
-                        <label for="">Corte I</label>
+                        <h3 for="">Corte I</h3>
                         <input type="number" pattern="[0-9]{1,2}" step="0.1" min="0" max="20" name="corte1" required>
                     </div>
                     <div class="field">
-                        <label for="">Corte II</label>
+                        <h3 for="">Corte II</h3>
                         <input type="number" pattern="[0-9]{1,2}" step="0.1" min="0" max="20" name="corte2" required>
                     </div>
                     <div class="field">
-                        <label for="">Corte III</label>
+                        <h3 for="">Corte III</h3>
                         <input type="number" pattern="[0-9]{1,2}" step="0.1" min="0" max="20" name="corte3" required>
                     </div>
                     <div class="field">
-                        <label for="">Corte IV</label>
+                        <h3 for="">Corte IV</h3>
                         <input type="number" pattern="[0-9]{1,2}" step="0.1" min="0" max="20" name="corte4" required>
                     </div>
                 </div>
                 <!--BOTÓN PARA ENVIAR EL FORMULARIO-->
-                <input type="submit"  name="submit" value="Guardar">
+                <input class="button-right" type="submit"  name="submit" value="Guardar">
             </form>
         </div>
     </main>

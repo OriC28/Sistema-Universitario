@@ -19,9 +19,9 @@ header{
     grid-area: header;
     display: grid;
     align-items: center;
-    grid-template-columns: repeat(2, 0fr);
     justify-content: space-between;
-    background-color: #78A8C2;
+    grid-template-columns: repeat(2, 0fr);
+    background-color: #243C60;
     h1{
         margin-left: 20px;
         color: #fff;
@@ -29,6 +29,9 @@ header{
 }
 /* MENÚ */
 aside{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     background-color: #fff;
     grid-area: sidebar;
 }
@@ -44,40 +47,61 @@ main{
 footer{
     display: grid;
     justify-content: center;
-    background-color: #78A8C2;
+    background-color: #243C60;
     grid-area: footer;
+    p{
+        color: #fff;
+    }
 }
 /* FUNCIONES DEL SISTEMA EN EL MENÚ */
 .function{
     display: flex;
     align-items: center;
-    background-color: #78A8C2;
-    border-radius: 10px;
-    margin: 15px 1px 15px ;
+    width: 200px;
+    height: 70px;
     padding: 5px;
 }
 /* ANIMACIÓN DE LAS FUNCIONES */
 .function:hover{
-    background-color: #4D6E80;
+    background-color: #243C60;
     transition: background-color 0.3s;
     cursor: pointer;
+    a{
+        color: #fff;
+    }
+}
+.function:hover img{
+    filter: invert(1);
 }
 /* LOS LINKS QUE LLEVAN A LAS FUNCIONES */
 a{
     text-decoration: none;
-    color: #fff;
+    color: #000000;
     width: 100%;
     
 }
 /* PA QUE LOS LINK Y LOS ICONOS NO ESTEN AÑUÑADOS */
 img, a, p{
     margin: 5px;
+    
+    
+}
+aside{
+    img{
+        margin-left: 10px;
+    }
 }
 /* CEPARADORES */
 .separator{
-    background-color: #78A8C2;;
+    background-color: #243C60;
     width: 100%;
-    height: 4px;
+    height: 2px;
+}
+.separator-menu{
+    background-color: #243C60;
+    width: 80%;
+    height: 2px;
+    
 }
 /* PERFIL (icono y label) */
 .profile{
@@ -179,7 +203,13 @@ img, a, p{
     font-size: 15px;
     color: #fff;
     border-color: transparent;
-    background-color: #78A8C2;
+    background-color: #243C60;
+}
+.button-right:hover{
+    
+        cursor: pointer;
+        background-color: #1b2f4e;
+    
 }
 /* ESTA CLASE LA USO PA CUANDO NECESITO EL FLEX */
 .div-flex{
@@ -207,12 +237,12 @@ img, a, p{
     display: grid;
     justify-items: center;
     align-items: center;
-    background-color: #78A8C2;
+    background-color: #243C60;
     border-radius: 16px;
-    max-width: 50px;
-    min-width: 130px;
-    max-height: 50px;
-    min-height: 130px;
+    max-width: 60px;
+    min-width: 140px;
+    max-height: 60px;
+    min-height: 140px;
     color: #fff;
     h1{
         margin: 0;

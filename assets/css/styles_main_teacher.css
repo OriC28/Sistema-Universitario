@@ -2,15 +2,18 @@ table{
     width: 90%;
     justify-self: center;
     margin: 20px;
-    border: 1px solid rgb(54, 54, 54);
     border-spacing: 0;
+    
+    border-radius: 16px; 
+    overflow: hidden;
 }
 
 th, td{
     width: 25%;
     text-align: center;
     vertical-align: center;
-    border: 1px solid rgb(54, 54, 54);
+    
+    padding: 8px;
 }
 
 .options{
@@ -22,8 +25,34 @@ th, td{
 .options>button{
     padding: 8px;
     border-radius: 30px;
-    border: 1px solid #000000;
+    margin: 6px;
+    border-color: transparent;
     cursor: pointer;
+}
+
+
+ /* COLORES DEL FONDO DE LA TABLA */
+thead{
+    background-color: #243C60;
+    color: #fff;
+}
+tbody{
+    background-color: #fff;
+}
+/* COLOR DE LOS BOTONES Y SU HOVER */
+.add-button{
+    background-color: #243C60;
+}
+.edit-button{
+    background-color: #038C4C;
+}
+.add-button:hover{
+    cursor: pointer;
+    background-color: #1b2f4e;
+}
+.edit-button:hover{
+    cursor: pointer;
+    background-color:#076a3c;
 }
 
 a{
@@ -31,23 +60,4 @@ a{
     color: #fff;
     font-weight: 500;
     cursor: pointer;
-}
-
-.add-button:hover{
-    background-color: #002f6d;
-}
-.edit-button:hover{
-    background-color:#076a3c;
-}
-
-thead{
-    background-color: #243C60;
-    color: #fff;
-}
-
-.add-button{
-    background-color: #243C60;
-}
-.edit-button{
-    background-color: #038C4C;
 }

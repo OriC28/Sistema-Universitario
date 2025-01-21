@@ -15,11 +15,15 @@ header{
     grid-template-columns: repeat(2, 0fr);
     justify-content: space-between;
     background-color: #243C60;
+    h1{
+        margin-left: 20px;
+        color: #fff;
+    }
 }
 
 /*COLOCANDO A LOS HIJOS DE HEADER*/
-header>div, h2, label, button{
-    margin: 10px;
+input{
+    margin: 5px;
 }
 
 /*CONTENEDOR DE TEXTO Y LOGO ADMIN*/
@@ -35,14 +39,19 @@ header>div, h2, label, button{
 }
 
 /*BOTÓN PARA CERRAR SESIÓN*/
-#button-logout{
+.button-logout{
     font-size: 15px;
     border-radius: 30px;
     padding: 5px;
     width: 150px;
     margin: 20px;
+    border-color: transparent;
 }
-
+/*ANIMACIÓN PARA EL BOTÓN DE CERRAR SESIÓN*/
+.button-logout:hover{
+    cursor: pointer;
+    background-color:#C4CBD3;
+}
 /*CONTENEDOR CIRCULAR PARA EL LOGO ADMIN*/
 #container-img{
     display: grid;
@@ -68,7 +77,7 @@ main{
     display: grid;
     justify-self: center;
     align-items: center;
-    margin-top: 20px;
+    margin-top: 10px;
     width: 90%;
     grid-template-columns: repeat(2, 1fr);
 }
@@ -81,7 +90,7 @@ main{
     column-gap: 10px;
 }
 /*CEDULA DEL ESTUDIANTE*/
-p{
+#cedula{
     font-size: 15px;
     justify-self: end;
     margin: 0px 10px 0px 0px;
@@ -92,7 +101,7 @@ p{
     display: flex;
     justify-self: center;
     width: 90%;
-    height: 4px;
+    height: 2px;
     background-color: #243C60;
 }
 
@@ -106,26 +115,37 @@ p{
     margin: 0px 0px 0px 75px;
     font-size: 15px;
 }
+form{
+    display: grid;
+    width: 100%;
+}
 /*CONTENEDOR PARA EL FORMULARIO*/
 .container-form{
     display: grid;
     background-color: #fff;
-    margin: 0px 20px 30px 20px;
+    margin: 0px 60px 30px 60px;
     border-radius: 20px;
 }
 /*CONTENEDOR PARA LOS LABELS E INPUTS*/
 .container-notes{
     display: grid;
     grid-template-columns: repeat(1, 1fr);
-    margin: 20px;
+    margin: 10px;
 }
 
 /*CONTENEDOR INDIVIDUAL PARA CADA CORTE*/
 .field{
-    display: grid;
-    grid-template-columns: repeat(2, 0.1fr);
+    display: flex;
     margin: 5px;
     font-size: 15px;
+    flex-direction: row;
+    align-items: center;
+    h3{
+        margin: 20px;
+        margin-right: 25px;
+        font-weight: normal;
+        
+    }
 }
 /*ESTILO PARA LOS INPUTS DE LAS NOTAS*/
 input[type=number]{
@@ -135,7 +155,7 @@ input[type=number]{
     font-size: 15px;
 }
 /*ESTILO PARA EL BOTÓN DE GUARDAR*/
-input[type=submit]{
+.button-right{
     display: grid;
     justify-self: end;
     margin: 20px;
@@ -144,19 +164,11 @@ input[type=submit]{
     border-radius: 30px;
     font-size: 15px;
     color: #fff;
+    border-color: transparent;
     background-color: #243C60;
 }
-/*ESTILO PARA EL LABEL DE NOTA DEFINITIVA*/
-#def-label{
-    margin: 20px;
-    font-size: 15px;   
-}
 
-/*ANIMACIÓN PARA EL BOTÓN DE CERRAR SESIÓN*/
-#button-logout:hover{
-    cursor: pointer;
-    background-color:#C4CBD3;
-}
+
 /*ANIMACIÓN PARA EL BOTÓN DE GUARDAR*/
 input[type=submit]:hover{
     cursor: pointer;
@@ -167,18 +179,30 @@ input[type=submit]:hover{
 footer{
     background-color: #243C60;
     text-align: center;
-    font-size: 15px;
+    
     padding: 5px;
     color: #fff;
 }
 
 /*----ESTILOS PARA LAS VALIDACIONES----*/
 input[type=number]:invalid{
+    border-radius: 5px;
+    border: 2px solid #7c7c7c;
+    outline: none;
+    background-color: #E2E5E8;
+    width: 80px;
+    height: 30px;
     background-color: #ffdddd;
-    border-color: #ffdddd;
+    
 }
 
 input[type=number]:valid{
+    border-radius: 5px;
+    border: 2px solid #7c7c7c;
+    outline: none;
+    background-color: #E2E5E8;
+    width: 80px;
+    height: 30px;
     background-color: #ddffdd;
-    border-color: #ddffdd;
+    
 }

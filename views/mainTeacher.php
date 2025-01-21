@@ -20,7 +20,7 @@
         <!--SUB-HEADER-->
         <div class="student-data">
             <div class="container-name">
-                <h2>Lista de estudiantes</h2>
+                <h1>Lista de estudiantes</h1>
             </div>
         </div>
 

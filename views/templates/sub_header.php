@@ -1,6 +1,6 @@
 <div class="student-data">
     <div class="container-name">
-        <h2><?php echo $name; ?></h2>
+        <h1><?php echo $name; ?></h1>
     </div>
-    <p>V-<?php echo $cedula; ?></p>
+    <h3 id="cedula">V-<?php echo $cedula; ?></h3>
 </div>
