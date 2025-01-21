@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="assets/css/styles_edit_add_notes.css"/>
+    <link rel="stylesheet" href="assets/css/styles_edit_add_notes.css?v=<?php echo time(); ?>" />
     <title>Agregar calificaciones</title>
 </head>
 <body>
@@ -25,8 +25,8 @@
 
         <!--DATOS DE LA MATERIA Y DOCENTE-->
         <div class="container-subject">
-            <h3>Materia: Programación</h3>
-            <h3>Docente: Carlos José Medina González</h3>
+            <h3>Materia: <?= htmlspecialchars($subject);?></h3>
+            <h3>Docente: <?=htmlspecialchars($teacher_name);?></h3>
         </div>
         <!--INGRESO DE LAS NOTAS POR CORTE-->
         <div class="container-form">
@@ -35,19 +35,19 @@
                     <!--CORTES-->
                     <div class="field">
                         <h3 for="">Corte I</h3>
-                        <input type="number" pattern="[0-9]{1,2}" step="0.1" min="0" max="20" name="corte1" required>
+                        <input class="input-corte" type="number" pattern="[0-9]{1,2}" step="0.1" min="0" max="20" name="corte1" required>
                     </div>
                     <div class="field">
                         <h3 for="">Corte II</h3>
-                        <input type="number" pattern="[0-9]{1,2}" step="0.1" min="0" max="20" name="corte2" required>
+                        <input class="input-corte" type="number" pattern="[0-9]{1,2}" step="0.1" min="0" max="20" name="corte2" required>
                     </div>
                     <div class="field">
                         <h3 for="">Corte III</h3>
-                        <input type="number" pattern="[0-9]{1,2}" step="0.1" min="0" max="20" name="corte3" required>
+                        <input class="input-corte" type="number" pattern="[0-9]{1,2}" step="0.1" min="0" max="20" name="corte3" required>
                     </div>
                     <div class="field">
                         <h3 for="">Corte IV</h3>
-                        <input type="number" pattern="[0-9]{1,2}" step="0.1" min="0" max="20" name="corte4" required>
+                        <input class="input-corte" type="number" pattern="[0-9]{1,2}" step="0.1" min="0" max="20" name="corte4" required>
                     </div>
                 </div>
                 <!--BOTÓN PARA ENVIAR EL FORMULARIO-->

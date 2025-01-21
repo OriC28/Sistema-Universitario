@@ -19,7 +19,7 @@ return [
     "port" => "3306",
     "dbname" => "sistema_universitario",
     "username" => "root",
-    "password" => "corijose2024.",
+    "password" => "Ori31525588$$.",
     "charset" => "utf8",
     "options" => [
         PDO::ATTR_EMULATE_PREPARES => FALSE, 

@@ -38,13 +38,17 @@ class NoteModel{
         }
     }
     /**
-    * Verifica la existencia de la cédula del estudiante en la tabla Calificaciones.
+    * Verifica la existencia de la cédula del estudiante en la tabla indicada.
     *
     * @return boolean true si la cédula es encontrada en la base de datos 
     * @param int $cedula identificador único del estudiante
+    * @param string $table nombre de la tabla donde se buscará la cédula
     */
-    public function existsCedula(int $cedula): bool{
-        $sql = "SELECT * FROM calificaciones WHERE cedula = :cedula";
+    public function existsCedula(int $cedula, string $table): bool{
+        $sql = "SELECT * FROM calificaciones WHERE cedula = :cedula;"; 
+        if($table == 'estudiantes'){
+            $sql = "SELECT * FROM estudiantes WHERE cedula = :cedula;";
+        }
         $cursor = $this->conn->prepare($sql);
         $cursor->bindParam(':cedula', $cedula, PDO::PARAM_INT);
         if($cursor->execute()){
@@ -93,7 +97,7 @@ class NoteModel{
             # VERIFICAR SI LA CÉDULA Y LAS NOTAS SON VALIDAS
             if($cedula && $notes){
                 # VERIFICAR SI EL ESTUDIANTE CON LA CÉDULA INGRESADA YA CUENTA CON LAS NOTAS CARGADAS
-                if($this->existsCedula($cedula)){
+                if($this->existsCedula($cedula, 'calificaciones')){
                     throw new Exception("El estudiante ya tiene las notas cargadas.", 1);
                 }
 
@@ -158,6 +162,10 @@ class NoteModel{
             $cedula = $this->validateCedula($cedula);
             $notes = $this->validateNotes($notes);
             
+            if(!$this->existsCedula($cedula, 'calificaciones')){
+                throw new Exception("El estudiante no tiene notas cargadas.", 1);
+            }
+
             # VERIFICAR SI LA CÉDULA Y LAS NOTAS SON VALIDAS
             if($cedula && $notes){
 

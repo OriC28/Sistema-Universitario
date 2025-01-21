@@ -41,9 +41,9 @@
 
             <div class="div-white">
                 <div class="div-flex">
-                    <h3>Materia: </h3><label>Programación</label>
-                    <h3>Profesor: </h3><label>Carlos José Medina González</label>
-                </div>
+                <h3>Materia: <?= htmlspecialchars($subject); ?></h3>
+                <h3>Docente: <?=htmlspecialchars($teacher_name);?></h3>
+            </div>
                 <div class="div-flex2">
                 <!-- BLOQUES DE LAS NOTAS -->
                     <?php if (!empty($notes)): ?>

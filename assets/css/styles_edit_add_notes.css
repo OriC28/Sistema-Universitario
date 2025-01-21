@@ -148,7 +148,7 @@ form{
     }
 }
 /*ESTILO PARA LOS INPUTS DE LAS NOTAS*/
-input[type=number]{
+.input-corte{
     border-radius: 30px;
     background-color: #C4CBD3;
     width: 100px;
@@ -168,7 +168,6 @@ input[type=number]{
     background-color: #243C60;
 }
 
-
 /*ANIMACIÓN PARA EL BOTÓN DE GUARDAR*/
 input[type=submit]:hover{
     cursor: pointer;
@@ -185,7 +184,7 @@ footer{
 }
 
 /*----ESTILOS PARA LAS VALIDACIONES----*/
-input[type=number]:invalid{
+.input-corte:invalid{
     border-radius: 5px;
     border: 2px solid #7c7c7c;
     outline: none;
@@ -193,10 +192,9 @@ input[type=number]:invalid{
     width: 80px;
     height: 30px;
     background-color: #ffdddd;
-    
 }
 
-input[type=number]:valid{
+.input-corte:valid{
     border-radius: 5px;
     border: 2px solid #7c7c7c;
     outline: none;
@@ -204,5 +202,4 @@ input[type=number]:valid{
     width: 80px;
     height: 30px;
     background-color: #ddffdd;
-    
 }

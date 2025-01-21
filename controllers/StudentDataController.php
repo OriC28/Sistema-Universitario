@@ -11,6 +11,7 @@
 */
 
 require_once "./model/NoteModel.php";
+require_once "./model/TeacherDataModel.php";
 
 /**
 * Controlador conectado al modelo NoteModel. Permite cargar los datos (cédula, nombre y las notas) 
@@ -67,7 +68,7 @@ class StudentDataController{
     * @param string $site_redirect nombre del sitio a redirigir
     * @throws Exception Si el nombre o el sitio son incorrectos.
     */
-    private function validateData(string $cedula, string $name, string $site_redirect): array{
+    private function validateData(int $cedula, string $name, string $site_redirect): array{
         if(!preg_match('/^[a-zA-Zs áéíóúÁÉÍÓÚñÑ]+\s/', $name)){
             throw new Exception("El nombre ingresado es incorrecto.", 1);
         }
@@ -79,7 +80,7 @@ class StudentDataController{
 
         $cedula_validated = $notes_user->validateCedula($cedula);
 
-        if(!$notes_user->existsCedula($cedula_validated)){
+        if(!$notes_user->existsCedula($cedula_validated, 'estudiantes')){
             throw new Exception("La cédula no es válida.", 1);
         }
         $name = trim(htmlspecialchars($name));
@@ -102,7 +103,7 @@ class StudentDataController{
         include("./config/keys.php"); #<-- INCLUIR LAS KEYS NECESARIAS PARA DESENCRIPTAR LOS DATOS
 
         # DESENCRIPTADO DE DATOS
-        $cedula = htmlspecialchars($this->decryptData($_GET['id'],$method, $key, $iv));
+        $cedula = (int) htmlspecialchars($this->decryptData($_GET['id'],$method, $key, $iv));
         $name = $this->decryptData($_GET['n'], $method, $key, $iv);
         $site_redirect = $_GET['site'];
 
@@ -120,6 +121,11 @@ class StudentDataController{
     * @throws Exception Si la ruta de dirección es inválida
     */
     private function setRedirectToView(string $cedula, string $name, string $site_redirect, NoteModel $notes_user): void{
+        # DATOS DEL DOCENTE Y NOMBRE DE LA MATERIA
+        $teacherModel = new TeacherDataModel();
+        $subject = $teacherModel->getSubject();
+        $teacher_name = $teacherModel->getTeacherName();
+        
         if($site_redirect == "editnotes"){
             $notes = $notes_user->getNotes($cedula);
             require_once "views/editNotes.php";
@@ -158,9 +164,8 @@ class StudentDataController{
                 $this->setRedirectToView($cedula, $name, $site_redirect, $notes_user);
             }
         }catch(\Throwable $th){
-            error_log($th->getMessage()); 
+            die($th->getMessage());
             http_response_code(500);
-            echo "Ha ocurrido un error inesperado. Por favor, inténtalo más tarde.";
             exit();
         }
     }

@@ -13,6 +13,9 @@
 *
 */
 
+require_once "./model/NoteModel.php";
+require_once "./model/TeacherDataModel.php";
+
 class ViewerNoteController{
     /**
     * Verifica si el usuario se encuentra en una sesión y valida la cédula.
@@ -39,6 +42,11 @@ class ViewerNoteController{
             $cedula = $this->existsStudentInSession($model);
             $notes = $model->getNotes($cedula);
 
+            # DATOS DEL DOCENTE Y NOMBRE DE LA MATERIA
+            $teacherModel = new TeacherDataModel();
+            $subject = $teacherModel->getSubject();
+            $teacher_name = $teacherModel->getTeacherName();
+        
             include('views/viewNotes.php');
         }
         catch(Exception $e){
