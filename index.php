@@ -3,8 +3,8 @@
 * Inclusión de todos los controladores 
 *
 */
-#include("controllers/UserController (prueba inicial).php");
 #include("controllers/TeacherController (prueba inicial).php");
+include("controllers/UserController (prueba inicial).php");
 include("controllers/NoteController.php");
 include("controllers/TableController.php");
 include("controllers/TeacherMethodController.php");

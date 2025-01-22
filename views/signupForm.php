@@ -1,3 +1,32 @@
+<?php
+    require_once "../config/config_session.php";
+    define('BASE_URL', '/Sistema-Universitario/');
+    
+    function vergacionInputs(): void {
+        # Aqui van los inputs que estan bien y no hacen falta escribir de nuevo
+    }
+
+    function showSignupErrors(): void {
+        if (isset($_SESSION["signupErrors"])) {
+            $errors = $_SESSION["signupErrors"];
+    
+            echo "<br>";
+    
+            foreach ($errors as $error) {
+                echo "<p>" . $error . "</p>";
+            }
+    
+            unset($_SESSION["signupErrors"]);
+        } 
+        // else if (isset($_GET["signup"])) {
+        //     if ($_GET["signup"] === "success") {
+        //         echo "<p>Signup success</p>";
+        //     }
+    
+        // }
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -12,7 +41,8 @@
     </header>
     <main>
         <div class="container">
-            <form action="" method="post" id="form">
+            <form action="<?= BASE_URL?>index.php?controller=user&action=signUp" method="post" id="form">
+            <!-- <form action="index.php?controller=note&action=setNotes" method="post"> -->
                 <div class="container-flex">
                     <div class="children-container-flex">
                         <div class="div-inputs-data">
@@ -54,7 +84,7 @@
                         <input class="input-signup" type="password" name="confirm_password" placeholder="   Confirma tu contraseña" required>
                     </div>
                 </div>
-
+                <?php showSignupErrors(); ?>
                 <div class="center-button2">
                     <input type="submit" name="submit" class="button-styles" value="Siguiente">
                     <span><a id="link-signup" href="loginStudent.php">O inicia sesión</a></span>
