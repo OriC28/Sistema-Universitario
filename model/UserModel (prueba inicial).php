@@ -17,10 +17,13 @@ class UserModel {
     private $config;
 
     public function __construct(array $userData) {
-        $this->first_name = $userData["primer-nombre"];
-        $this->second_name = $userData["segundo-nombre"];
-        $this->first_lastname = $userData["primer-apellido"];
-        $this->second_lastname = $userData["segundo-apellido"];
+        /**
+         * Aquí se estaba intentado acceder a los valores del array con keys incorrectas
+         */
+        $this->first_name = $userData["first_name"];
+        $this->second_name = $userData["second_name"];
+        $this->first_lastname = $userData["first_lastname"];
+        $this->second_lastname = $userData["second_lastname"];
 
         $this->cedula = $userData["cedula"];
         $this->password = $userData["password"];

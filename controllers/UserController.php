@@ -11,8 +11,11 @@ class UserController {
         $this->errors = [];
     }
 
-    public function signUp() {
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    public function signUp(){
+        /**
+         * Se le agregó $_POST['submit'] para verificar si el usuario hizo click en el botón 'Siguiente'
+         */
+        if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit'])) {
             $this->userInputs = [
                 "first_name" => trim($_POST["primer-nombre"]),
                 "second_name" => trim($_POST["segundo-nombre"]),
@@ -37,21 +40,25 @@ class UserController {
 
                 # Verifica si la contraseña cumple con los requisitos
                 $this->validatePassword();
-
-                require_once "../config/config_session.php";
+                /**
+                 * Modificación de las rutas, al emplear una ruta de la forma index.php?controller=controller&action=method
+                 * se estaría accediendo a los demás archivos desde la ubicación del archivo index.php, por lo que no es 
+                 * necesario emplear ./ o ../ para ubicarse en la ruta determinada
+                 */
+                # require_once "config/config_session.php";
                 
                 if ($this->errors) {
                     $_SESSION["signupErrors"] = $this->errors;
 
                     // $_SESSION["signupData"] = $this->userInputs;
 
-                    require_once "./views/signupForm.php";
+                    require_once "views/signupForm.php";
                     die();
                 }
 
                 $this->signupUser();
 
-                header("Location: ./views/recoverypasswordForm.php");
+                header("Location: views/recoverypasswordForm.php");
                 die();
             } catch (Exception $e) {
                 die("Error: " . $e->getMessage());
@@ -77,43 +84,42 @@ class UserController {
 
     public function checkEmptyInputs(): void {
         foreach ($this->userInputs as $key => $value) {
-            if (empty($value)) {
+            if(empty($value)){
                 $this->errors["empty_inputs"] = "Por favor, rellene todos los campos.";
                 return;
             }
         }
-        return;
     }
     
     function validateTextInputs(): void {
         foreach ($this->userInputs as $key => $value) {
-            if ($key === "cedula") {
-                break;
-            }
+            if ($key !== "cedula" || $key !== 'password' || $key !== 'confirm_password'){
 
-            if (mb_strlen($value) < 2 || mb_strlen($value) > 16) {
-                $this->errors["fields_length"] = "EL campo debe tener mínimo 2 y máximo 16 caracteres.";
-            }
-
-            if (!preg_match("/^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑàèìòùÀÈÌÒÙ\s'-]$/u", $value)) {
-                $this->errors["fields_characters"] = "El campo no puede contener caracteres especiales.";
+                if(mb_strlen($value) < 2 || mb_strlen($value) > 16) {
+                    $this->errors["fields_length"] = "EL campo debe tener mínimo 2 y máximo 16 caracteres.";
+                    break;
+                }
+                /*
+                if(!preg_match('/^[a-zA-ZáéíóúüñÁÉÍÓÚÑ]+$/u', $value)){
+                    $this->errors["fields_characters"] = "El campo no puede contener caracteres especiales.";
+                    break;
+                }*/
             }
         }
-        return;
     }
 
     function validateCedula(): void {
         $cedula = $this->userInputs["cedula"];
 
         # Verifica la longitud de la cédula y si solo contiene numeros
-        if (((mb_strlen($cedula) !== 7) || (mb_strlen($cedula) !== 8)) || (!preg_match("/^\d+$/", $cedula))) {
+        if (((strlen($cedula) !== 7) && (strlen($cedula) !== 8)) || !is_numeric($cedula)) {
             $this->errors["cedula_error"] = "La cédula no es válida.";
         }
 
         $user = new UserModel($this->userInputs);
 
         # Verifica si la cédula ya está registrada
-        if (!$user->getCedula()) {
+        if ($user->getCedula()) {
             $this->errors["cedula_used"] = "La cédula ya está registrada.";
         }
         return;

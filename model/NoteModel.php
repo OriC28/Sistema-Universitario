@@ -27,7 +27,7 @@ class NoteModel{
     * @param int $cedula identificador único del estudiante
     * @throws Exception Si la cédula no es válida
     */
-    public function validateCedula(int $cedula): int{
+    public function validateCedula(string $cedula): int{
         if(strlen($cedula) == 7 || strlen($cedula) == 8){
             if(filter_var($cedula, FILTER_VALIDATE_INT)){
                 $cedula = (int)$cedula;

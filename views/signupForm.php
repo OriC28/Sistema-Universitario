@@ -1,5 +1,5 @@
 <?php
-    require_once "../config/config_session.php";
+    require_once "config/config_session.php";
     define('BASE_URL', '/Sistema-Universitario/');
     
     function vergacionInputs(): void {
@@ -32,7 +32,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../assets/css/login-register.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="assets/css/login-register.css?v=<?php echo time(); ?>" />
     <title>Regístrate</title>
 </head>
 <body class="responsive">

@@ -4,7 +4,7 @@
 *
 */
 #include("controllers/TeacherController (prueba inicial).php");
-include("controllers/UserController (prueba inicial).php");
+include("controllers/UserController.php");
 include("controllers/NoteController.php");
 include("controllers/TableController.php");
 include("controllers/TeacherMethodController.php");
