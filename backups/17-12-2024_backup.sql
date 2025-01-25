@@ -34,8 +34,8 @@ CREATE TABLE `calificaciones` (
   `nota_definitiva` float DEFAULT NULL,
   KEY `cedula_calificaciones_idx` (`cedula`),
   KEY `id_materia_idx` (`id_materia`),
-  CONSTRAINT `cedula_calificaciones` FOREIGN KEY (`cedula`) REFERENCES `estudiantes` (`cedula`),
-  CONSTRAINT `id_materia_calificaciones` FOREIGN KEY (`id_materia`) REFERENCES `materias` (`id_materia`)
+  CONSTRAINT `cedula_calificaciones` FOREIGN KEY (`cedula`) REFERENCES `estudiantes` (`cedula`) ON DELETE CASCADE,
+  CONSTRAINT `id_materia_calificaciones` FOREIGN KEY (`id_materia`) REFERENCES `materias` (`id_materia`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -66,7 +66,7 @@ CREATE TABLE `estudiantes` (
   UNIQUE KEY `telefono_UNIQUE` (`telefono`),
   UNIQUE KEY `correo_electronico_UNIQUE` (`correo_electronico`),
   KEY `cedula_estudiante_idx` (`cedula`),
-  CONSTRAINT `cedula_estudiante` FOREIGN KEY (`cedula`) REFERENCES `usuarios` (`cedula`)
+  CONSTRAINT `cedula_estudiante` FOREIGN KEY (`cedula`) REFERENCES `usuarios` (`cedula`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -120,7 +120,7 @@ CREATE TABLE `preguntas_seguridad` (
   `pregunta3` varchar(45) NOT NULL,
   `respuesta3` varchar(45) NOT NULL,
   KEY `cedula_preguntas_idx` (`cedula`),
-  CONSTRAINT `cedula_preguntas` FOREIGN KEY (`cedula`) REFERENCES `estudiantes` (`cedula`)
+  CONSTRAINT `cedula_preguntas` FOREIGN KEY (`cedula`) REFERENCES `estudiantes` (`cedula`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -149,7 +149,7 @@ CREATE TABLE `profesores` (
   `primer_apellido_profesor` varchar(45) NOT NULL,
   KEY `cedula_profesor_idx` (`cedula`),
   KEY `id_materia_idx` (`id_materia`),
-  CONSTRAINT `cedula_profesor` FOREIGN KEY (`cedula`) REFERENCES `usuarios` (`cedula`),
+  CONSTRAINT `cedula_profesor` FOREIGN KEY (`cedula`) REFERENCES `usuarios` (`cedula`) ON DELETE CASCADE,
   CONSTRAINT `id_materia` FOREIGN KEY (`id_materia`) REFERENCES `materias` (`id_materia`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;

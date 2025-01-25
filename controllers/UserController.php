@@ -1,6 +1,6 @@
 <?php
 
-require_once './model/UserModel (prueba inicial).php';
+require_once './model/UserModel.php';
 
 class UserController {
     private $userInputs;
@@ -12,9 +12,6 @@ class UserController {
     }
 
     public function signUp(){
-        /**
-         * Se le agregó $_POST['submit'] para verificar si el usuario hizo click en el botón 'Siguiente'
-         */
         if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit'])) {
             $this->userInputs = [
                 "first_name" => trim($_POST["primer-nombre"]),
@@ -40,12 +37,6 @@ class UserController {
 
                 # Verifica si la contraseña cumple con los requisitos
                 $this->validatePassword();
-                /**
-                 * Modificación de las rutas, al emplear una ruta de la forma index.php?controller=controller&action=method
-                 * se estaría accediendo a los demás archivos desde la ubicación del archivo index.php, por lo que no es 
-                 * necesario emplear ./ o ../ para ubicarse en la ruta determinada
-                 */
-                # require_once "config/config_session.php";
                 
                 if ($this->errors) {
                     $_SESSION["signupErrors"] = $this->errors;
@@ -56,7 +47,7 @@ class UserController {
                     die();
                 }
 
-                $this->signupUser();
+                // $this->signupUser();
 
                 header("Location: views/recoverypasswordForm.php");
                 die();
@@ -93,19 +84,21 @@ class UserController {
     
     function validateTextInputs(): void {
         foreach ($this->userInputs as $key => $value) {
-            if ($key !== "cedula" || $key !== 'password' || $key !== 'confirm_password'){
+            if ($key === "cedula") {
+                break;
+            }
 
-                if(mb_strlen($value) < 2 || mb_strlen($value) > 16) {
-                    $this->errors["fields_length"] = "EL campo debe tener mínimo 2 y máximo 16 caracteres.";
-                    break;
-                }
-                /*
-                if(!preg_match('/^[a-zA-ZáéíóúüñÁÉÍÓÚÑ]+$/u', $value)){
-                    $this->errors["fields_characters"] = "El campo no puede contener caracteres especiales.";
-                    break;
-                }*/
+            if(mb_strlen($value) < 2 || mb_strlen($value) > 16) {
+                $this->errors["fields_length"] = "Nombres y apellidos deben tener mínimo 2 y máximo 16 caracteres.";
+                break;
+            }
+            
+            if(!preg_match('/^[a-zA-ZáéíóúüñÁÉÍÓÚÑ]+$/u', $value)){
+                $this->errors["fields_characters"] = "Nombres y apellidos no pueden contener caracteres especiales.";
+                break;
             }
         }
+        return;
     }
 
     function validateCedula(): void {
@@ -146,12 +139,13 @@ class UserController {
         }
 
         if (!preg_match('/[!?@#$%&*()-_,.]/', $password)) {
-            $this->errors["password_special"] = "La contraseña debe tener al menos un caracter especial '!?@#$%&*()-_,.'.";
+            $this->errors["password_special"] = "La contraseña debe tener al menos un caracter especial !?@#$%&*()-_,.";
         }
 
         if ($password !== $confirm_password) {
             $this->errors["password_diff"] = "Las contraseñas no coinciden.";
         }
+
         return;
     }
 }

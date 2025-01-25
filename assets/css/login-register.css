@@ -219,3 +219,14 @@ form{
     justify-content: space-around;
     gap: 25px;
 }
+
+.error-message {
+    color: red;
+    text-align: center;
+    font-weight: bold;
+    margin: 5px 0;
+    padding: 5px;
+    border-radius: 5px;
+    max-width: 300px;
+    font-size: 0.9em;
+}

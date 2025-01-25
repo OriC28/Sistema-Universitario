@@ -1,6 +1,9 @@
 <?php
     require_once "config/config_session.php";
-    define('BASE_URL', '/Sistema-Universitario/');
+    
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+        session_start();
+    }
     
     function vergacionInputs(): void {
         # Aqui van los inputs que estan bien y no hacen falta escribir de nuevo
@@ -13,7 +16,7 @@
             echo "<br>";
     
             foreach ($errors as $error) {
-                echo "<p>" . $error . "</p>";
+                echo '<div class="container"><p class="error-message">' . $error . '</p></div>';
             }
     
             unset($_SESSION["signupErrors"]);
@@ -32,7 +35,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/css/login-register.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/website/universidad/Sistema-Universitario/assets/css/login-register.css?v=<?php echo time(); ?>" />
     <title>Regístrate</title>
 </head>
 <body class="responsive">
@@ -41,8 +44,7 @@
     </header>
     <main>
         <div class="container">
-            <form action="<?= BASE_URL?>index.php?controller=user&action=signUp" method="post" id="form">
-            <!-- <form action="index.php?controller=note&action=setNotes" method="post"> -->
+            <form action="http://localhost/website/universidad/Sistema-Universitario/index.php?controller=user&action=signUp" method="post" id="form">
                 <div class="container-flex">
                     <div class="children-container-flex">
                         <div class="div-inputs-data">

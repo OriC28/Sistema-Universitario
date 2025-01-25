@@ -68,6 +68,7 @@ class User{
     }
 
     public function getPassword(): string{
+        $passwordsValidated = "";
 
         if($this->validatePassword($this->password) && $this->validatePassword($this->confirm_password)){
             if($this->password != $this->confirm_password){

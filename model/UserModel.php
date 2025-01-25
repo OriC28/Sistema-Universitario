@@ -17,9 +17,6 @@ class UserModel {
     private $config;
 
     public function __construct(array $userData) {
-        /**
-         * Aquí se estaba intentado acceder a los valores del array con keys incorrectas
-         */
         $this->first_name = $userData["first_name"];
         $this->second_name = $userData["second_name"];
         $this->first_lastname = $userData["first_lastname"];
