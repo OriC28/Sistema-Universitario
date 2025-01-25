@@ -1,12 +1,6 @@
 <?php
-    require_once "config/config_session.php";
-    
     if (session_status() !== PHP_SESSION_ACTIVE) {
         session_start();
-    }
-    
-    function vergacionInputs(): void {
-        # Aqui van los inputs que estan bien y no hacen falta escribir de nuevo
     }
 
     function showSignupErrors(): void {
@@ -21,12 +15,6 @@
     
             unset($_SESSION["signupErrors"]);
         } 
-        // else if (isset($_GET["signup"])) {
-        //     if ($_GET["signup"] === "success") {
-        //         echo "<p>Signup success</p>";
-        //     }
-    
-        // }
     }
 ?>
 
@@ -35,7 +23,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/website/universidad/Sistema-Universitario/assets/css/login-register.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="http://localhost/website/universidad/Sistema-Universitario/assets/css/login-register.css?v=<?php echo time(); ?>" />
     <title>Regístrate</title>
 </head>
 <body class="responsive">
@@ -44,7 +32,7 @@
     </header>
     <main>
         <div class="container">
-            <form action="http://localhost/website/universidad/Sistema-Universitario/index.php?controller=user&action=signUp" method="post" id="form">
+            <form action="http://localhost/website/universidad/Sistema-Universitario/index.php?controller=register&action=startSignUp" method="post" id="form">
                 <div class="container-flex">
                     <div class="children-container-flex">
                         <div class="div-inputs-data">

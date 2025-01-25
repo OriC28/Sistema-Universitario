@@ -43,8 +43,12 @@ class NoteModel{
     * @return boolean true si la cédula es encontrada en la base de datos 
     * @param int $cedula identificador único del estudiante
     */
-    public function existsCedula(int $cedula): bool{
-        $sql = "SELECT * FROM calificaciones WHERE cedula = :cedula";
+    public function existsCedula(int $cedula, bool $flag=false): bool{
+        if($flag){
+            $sql = "SELECT * FROM usuarios WHERE cedula = :cedula";            
+        }else{
+            $sql = "SELECT * FROM calificaciones WHERE cedula = :cedula";
+        }
         $cursor = $this->conn->prepare($sql);
         $cursor->bindParam(':cedula', $cedula, PDO::PARAM_INT);
         if($cursor->execute()){
