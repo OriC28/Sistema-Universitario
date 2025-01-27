@@ -34,8 +34,8 @@ CREATE TABLE `calificaciones` (
   `nota_definitiva` float DEFAULT NULL,
   KEY `cedula_calificaciones_idx` (`cedula`),
   KEY `id_materia_idx` (`id_materia`),
-  CONSTRAINT `cedula_calificaciones` FOREIGN KEY (`cedula`) REFERENCES `estudiantes` (`cedula`),
-  CONSTRAINT `id_materia_calificaciones` FOREIGN KEY (`id_materia`) REFERENCES `materias` (`id_materia`)
+  CONSTRAINT `cedula_calificaciones` FOREIGN KEY (`cedula`) REFERENCES `estudiantes` (`cedula`) ON DELETE CASCADE,
+  CONSTRAINT `id_materia_calificaciones` FOREIGN KEY (`id_materia`) REFERENCES `materias` (`id_materia`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -66,7 +66,7 @@ CREATE TABLE `estudiantes` (
   UNIQUE KEY `telefono_UNIQUE` (`telefono`),
   UNIQUE KEY `correo_electronico_UNIQUE` (`correo_electronico`),
   KEY `cedula_estudiante_idx` (`cedula`),
-  CONSTRAINT `cedula_estudiante` FOREIGN KEY (`cedula`) REFERENCES `usuarios` (`cedula`)
+  CONSTRAINT `cedula_estudiante` FOREIGN KEY (`cedula`) REFERENCES `usuarios` (`cedula`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -92,7 +92,7 @@ CREATE TABLE `materias` (
   `nombre_profesor` varchar(45) NOT NULL,
   PRIMARY KEY (`id_materia`),
   UNIQUE KEY `nombre_materia_UNIQUE` (`nombre_materia`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -101,6 +101,7 @@ CREATE TABLE `materias` (
 
 LOCK TABLES `materias` WRITE;
 /*!40000 ALTER TABLE `materias` DISABLE KEYS */;
+INSERT INTO `materias` VALUES (1,'Programación','Carlos José Medina González');
 /*!40000 ALTER TABLE `materias` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -113,14 +114,14 @@ DROP TABLE IF EXISTS `preguntas_seguridad`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `preguntas_seguridad` (
   `cedula` int NOT NULL,
-  `pregunta1` varchar(45) NOT NULL,
-  `respuesta1` varchar(45) NOT NULL,
-  `pregunta2` varchar(45) NOT NULL,
-  `respuesta2` varchar(45) NOT NULL,
-  `pregunta3` varchar(45) NOT NULL,
-  `respuesta3` varchar(45) NOT NULL,
+  `pregunta1` varchar(100) NOT NULL,
+  `respuesta1` varchar(100) NOT NULL,
+  `pregunta2` varchar(100) NOT NULL,
+  `respuesta2` varchar(50) NOT NULL,
+  `pregunta3` varchar(50) NOT NULL,
+  `respuesta3` varchar(50) NOT NULL,
   KEY `cedula_preguntas_idx` (`cedula`),
-  CONSTRAINT `cedula_preguntas` FOREIGN KEY (`cedula`) REFERENCES `estudiantes` (`cedula`)
+  CONSTRAINT `cedula_preguntas` FOREIGN KEY (`cedula`) REFERENCES `estudiantes` (`cedula`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -149,9 +150,9 @@ CREATE TABLE `profesores` (
   `primer_apellido_profesor` varchar(45) NOT NULL,
   KEY `cedula_profesor_idx` (`cedula`),
   KEY `id_materia_idx` (`id_materia`),
-  CONSTRAINT `cedula_profesor` FOREIGN KEY (`cedula`) REFERENCES `usuarios` (`cedula`),
+  CONSTRAINT `cedula_profesor` FOREIGN KEY (`cedula`) REFERENCES `usuarios` (`cedula`) ON DELETE CASCADE,
   CONSTRAINT `id_materia` FOREIGN KEY (`id_materia`) REFERENCES `materias` (`id_materia`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -160,6 +161,7 @@ CREATE TABLE `profesores` (
 
 LOCK TABLES `profesores` WRITE;
 /*!40000 ALTER TABLE `profesores` DISABLE KEYS */;
+INSERT INTO `profesores` VALUES (10643883,1,'Carlos','José','Medina','González');
 /*!40000 ALTER TABLE `profesores` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -184,6 +186,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
+INSERT INTO `usuarios` VALUES (10643883,'$2y$10$85CKq7wFnIq.50u1dGM9cuNayhVzWMzLXq5Lu9JFghT6EgtUOpYEK','profesor');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -196,4 +199,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-12-17 18:32:11
+-- Dump completed on 2025-01-25 18:23:25

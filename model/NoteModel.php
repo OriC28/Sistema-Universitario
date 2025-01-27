@@ -1,17 +1,19 @@
 <?php
 
+require_once 'User.php';
+
 /**
 * Modelo para manipular las calificaciones de los estudiantes.
 *
 */
-class NoteModel{
+class NoteModel extends User{
    private $id_materia;
    private $conn;
 
     public function __construct(){
         $this->id_materia = 1;
 
-        # ESTABLECIENDO CONEXIÓN A LA BASE DE DATOS
+        # Estableciendo la conexión a la base de datos
         $config = include("./config/config.php");
         $conn_object = new BDModel($config);
         $this->conn = $conn_object->connect();
@@ -20,35 +22,20 @@ class NoteModel{
             throw new Exception("No se pudo establecer la conexión a la base de datos.", 1);  
         }
     }
+
      /**
-    * Valida la cédula de acuerdo a la longitud y si es un valor entero.
-    *
-    * @return int si la cédula cumple lo necesario para considerarse válida
-    * @param int $cedula identificador único del estudiante
-    * @throws Exception Si la cédula no es válida
-    */
-    public function validateCedula(int $cedula): int{
-        if(strlen($cedula) == 7 || strlen($cedula) == 8){
-            if(filter_var($cedula, FILTER_VALIDATE_INT)){
-                $cedula = (int)$cedula;
-                return $cedula;
-            }
-        }else{
-            throw new Exception("Cédula inválida.", 1);
-        }
-    }
-    /**
-    * Verifica la existencia de la cédula del estudiante en la tabla indicada.
+    * Verifica la existencia de la cédula del estudiante en la tabla Calificaciones.
     *
     * @return boolean true si la cédula es encontrada en la base de datos 
     * @param int $cedula identificador único del estudiante
-    * @param string $table nombre de la tabla donde se buscará la cédula
     */
-    public function existsCedula(int $cedula, string $table): bool{
-        $sql = "SELECT * FROM calificaciones WHERE cedula = :cedula;"; 
-        if($table == 'estudiantes'){
-            $sql = "SELECT * FROM estudiantes WHERE cedula = :cedula;";
+    public function existsCedula(int $cedula, bool $flag=false): bool{
+        if($flag){
+            $sql = "SELECT * FROM usuarios WHERE cedula = :cedula";            
+        }else{
+            $sql = "SELECT * FROM calificaciones WHERE cedula = :cedula";
         }
+        
         $cursor = $this->conn->prepare($sql);
         $cursor->bindParam(':cedula', $cedula, PDO::PARAM_INT);
         if($cursor->execute()){
@@ -58,7 +45,28 @@ class NoteModel{
         }
         return false;
     }
+    
+    /**
+    * Valida y sanitiza cada nota del estudiante de forma individual.
+    *
+    * @return float si la nota cumple lo necesario para considerarse válida
+    * @param float $note nota del estudiante
+    * @throws Exception Si alguna nota no es de tipo flotante o numérica y si no se encuentra en el rango establecido
+    */
+    private function validateSingleNote(float $note): float{
+        $note_sanitized = filter_var($note, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 
+        if($note_sanitized === false || !is_numeric($note_sanitized)){
+            throw new Exception("Las notas no son válidas.", 1);
+        }
+
+        $note = (float)$note_sanitized;
+
+        if($note<0 || $note>20){
+            throw new Exception("Las notas deben estar en el rango de 0 a 20 puntos.", 1); 
+        }
+        return $note;
+    }
    /**
     * Valida y sanitiza las notas del estudiante.
     *
@@ -70,15 +78,10 @@ class NoteModel{
         if(count($notes)!=4){
             throw new Exception("Las notas no están completas. En caso de no 
                                 contener notas en un corte coloque 0.", 1);
-        }
-        foreach($notes as $note){
-            if($note<0 || $note>20){
-                throw new Exception("Las notas deben estar en el rango de 0 a 20 puntos.", 1); 
-            }
-        }
+        } 
+        $clean_notes = array_map([$this, 'validateSingleNote'], $notes);
 
-        $clean_notes = filter_var_array($notes, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-        $definitiva = array_sum($clean_notes)/4;
+        $definitiva = array_sum($notes)/4;
         return ['notes' => $clean_notes, 'definitiva' => $definitiva];
     }
 
@@ -89,21 +92,21 @@ class NoteModel{
      * @param array $notes notas del estudiante
      * @throws Exception Si la cédula y notas no son válidas o si existe un error al registrar las notas
      */
-    public function setNotes(int $cedula, array $notes = []): void{
+    public function setNotes(string $cedula, array $notes = []): void{
         try{
-            $cedula = $this->validateCedula($cedula);
+            $cedula = User::validateCedula($cedula);
             $notes = $this->validateNotes($notes);
 
             # VERIFICAR SI LA CÉDULA Y LAS NOTAS SON VALIDAS
             if($cedula && $notes){
                 # VERIFICAR SI EL ESTUDIANTE CON LA CÉDULA INGRESADA YA CUENTA CON LAS NOTAS CARGADAS
-                if($this->existsCedula($cedula, 'calificaciones')){
+                if($this->existsCedula($cedula)){
                     throw new Exception("El estudiante ya tiene las notas cargadas.", 1);
                 }
 
                 $sql = "INSERT INTO calificaciones VALUES (:cedula, :id_materia, :primer_corte, 
                         :segundo_corte, :tercer_corte, :cuarto_corte, :definitiva);";
-                                
+                
                 $cursor = $this->conn->prepare($sql);
                 $cursor->bindParam(':cedula', $cedula);
                 $cursor->bindParam(':id_materia', $this->id_materia);
@@ -129,11 +132,12 @@ class NoteModel{
     * @param int $cedula identificador único del estudiante
     * @throws Exception Si no es posible obtener las notas o si la cédula no es correcta
     */
-    public function getNotes(int $cedula): array|false{
+    public function getNotes(string $cedula): array|false{
         try{
-            $cedula = $this->validateCedula($cedula);
-
+           
             # VERIFICAR SI LA CÉDULA ES VALIDA
+            $cedula = User::validateCedula($cedula);
+
             if($cedula){
                 
                 $sql = "SELECT primer_corte, segundo_corte, tercer_corte, cuarto_corte, 
@@ -157,15 +161,15 @@ class NoteModel{
     * @param array $notes notas que reemplazarán a las que están en la base de datos
     * @throws Exception Si la cédula y notas no son válidas o si existe un error al actualizar las notas
     */
-    public function updateNotes(int $cedula, array $notes=[]): void{
+    public function updateNotes(string $cedula, array $notes=[]): void{
         try{
-            $cedula = $this->validateCedula($cedula);
+            $cedula = User::validateCedula($cedula);
             $notes = $this->validateNotes($notes);
-            
-            if(!$this->existsCedula($cedula, 'calificaciones')){
+
+            if(!$this->existsCedula($cedula)){
                 throw new Exception("El estudiante no tiene notas cargadas.", 1);
             }
-
+            
             # VERIFICAR SI LA CÉDULA Y LAS NOTAS SON VALIDAS
             if($cedula && $notes){
 

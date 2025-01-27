@@ -1,3 +1,17 @@
+<?php 
+    define('BASE_URL', '/Sistema-Universitario/');
+
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+        session_start();
+    }
+
+    if(!isset($_SESSION['logged-in-teacher']) || empty($_SESSION['logged-in-teacher']) || !isset($_SESSION['rol']) || empty($_SESSION['rol'])){
+        if(!$_SESSION['logged-in-teacher'] || $_SESSION['rol'] !== 'profesor'){
+            header('Location: '.BASE_URL.'views/loginTeacher.php');
+            exit();
+        }
+    }
+?>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -14,7 +28,7 @@
             <h1>DOCENTES</>
             
         </div>
-        <input class="button-logout" type="button" value="Cerrar Sesión">
+        <a class="button-logout" href="views/templates/logout.php">Cerrar Sesión</a>
     </header>
     <!--CONTENIDO-->
     <main>
@@ -30,7 +44,7 @@
         </div>
         <!--INGRESO DE LAS NOTAS POR CORTE-->
         <div class="container-form">
-            <form action="index.php?controller=note&action=setNotes" method="post">
+            <form action="<?=BASE_URL?>index.php?controller=note&action=setNotes" method="post">
                 <div class="container-notes">
                     <!--CORTES-->
                     <div class="field">

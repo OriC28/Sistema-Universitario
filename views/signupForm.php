@@ -1,9 +1,32 @@
+<?php
+
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+        session_start();
+    }
+
+    function showSignupErrors(): void {
+        if (isset($_SESSION["signupErrors"])) {
+            $errors = $_SESSION["signupErrors"];
+    
+            echo "<br>";
+    
+            foreach ($errors as $error) {
+                echo '<div class="container-errors"><p class="error-message">' . $error . '</p></div>';
+            }
+    
+            unset($_SESSION["signupErrors"]);
+        } 
+    }
+?>
+
+
 <!DOCTYPE html>
 <html lang="es">
+<?php define('BASE_URL', '/Sistema-Universitario/');?>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../assets/css/login-register.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/login-register.css?v=<?php echo time(); ?>" />
     <title>Regístrate</title>
 </head>
 <body class="responsive">
@@ -12,7 +35,7 @@
     </header>
     <main>
         <div class="container">
-            <form action="" method="post" id="form">
+            <form action="<?= BASE_URL?>index.php?controller=register&action=startSignUp" method="post" id="form">
                 <div class="container-flex">
                     <div class="children-container-flex">
                         <div class="div-inputs-data">
@@ -54,7 +77,19 @@
                         <input class="input-signup" type="password" name="confirm_password" placeholder="   Confirma tu contraseña" required>
                     </div>
                 </div>
-
+                <?php showSignupErrors(); ?>
+                <!--
+                <script>
+                    setTimeout(()=>{
+                        let containerMessage = document.querySelectorAll("div.container-errors");
+                        if(containerMessage){
+                            containerMessage.forEach(message => {
+                                message.remove();
+                            });
+                        }
+                    }, 3000);
+                </script>
+                -->
                 <div class="center-button2">
                     <input type="submit" name="submit" class="button-styles" value="Siguiente">
                     <span><a id="link-signup" href="loginStudent.php">O inicia sesión</a></span>

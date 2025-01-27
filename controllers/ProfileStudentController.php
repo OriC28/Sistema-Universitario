@@ -15,10 +15,9 @@ class ProfileStudentController extends ViewerNoteController{
      */
     public function getStudentData(){
         try{
-            $modelObject = new NoteModel();
             $modelStudentData = new ProfileStudentModel();
 
-            $cedulaValidated = $this->existsStudentInSession($modelObject);
+            $cedulaValidated = $this->existsStudentInSession();
 
             $data = $modelStudentData->getStudentData($cedulaValidated);
         
