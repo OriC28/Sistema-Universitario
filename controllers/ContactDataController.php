@@ -22,7 +22,7 @@ class ContactDataController extends ViewerNoteController{
         if(!isset($_POST['phone']) || !isset($_POST['email'])){
             throw new Exception("Faltan datos en la petición.", 1);
         }
-        return ['phone' => htmlspecialchars($_POST['phone']), 'email' => htmlspecialchars($_POST['email'])];
+        return ['phone' => $_POST['phone'], 'email' => $_POST['email']];
     }
     /**
      * Verifica la existencia de la cédula del estudiante en la tabla Calificaciones.
@@ -36,10 +36,12 @@ class ContactDataController extends ViewerNoteController{
             $modelObject = new NoteModel();
             $modelStudentData = new ProfileStudentModel();
             $cedulaValidated = $this->existsStudentInSession($modelObject);
-    
-            $contactmodel = new ContactDataModel();
-            $params = $this->getParams();
-            $contactmodel->addContactData($cedulaValidated, $params['phone'], $params['email']);
+
+            if($cedulaValidated){
+                $contactmodel = new ContactDataModel();
+                $params = $this->getParams();
+                $contactmodel->addContactData($cedulaValidated, $params['phone'], $params['email']);
+            }
         }catch(\Throwable $th){
             echo $th->getMessage();
         }

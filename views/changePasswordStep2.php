@@ -1,38 +1,30 @@
-<?php
+<?php 
+    define('BASE_URL', '/Sistema-Universitario/');
     if (session_status() !== PHP_SESSION_ACTIVE) {
         session_start();
     }
 
-    function showSignupErrors(): void {
-        if (isset($_SESSION["signupErrors"])) {
-            $errors = $_SESSION["signupErrors"];
-    
-            echo "<br>";
-    
-            foreach ($errors as $error) {
-                echo '<div class="container-errors"><p class="error-message">' . $error . '</p></div>';
-            }
-        }
-        unset($_SESSION["signupErrors"]);
+    if(!isset($_SESSION['securityStepReady']) || empty($_SESSION['securityStepReady'])){
+        header('Location: '.BASE_URL.'views/changePasswordStep1.php');
+        exit();
     }
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
-<?php define('BASE_URL', '/Sistema-Universitario/');?>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/login-register.css?v=<?php echo time(); ?>" />
-    <title>Preguntas de seguridad</title>
+    <title>Cambiar contraseña</title>
 </head>
 <body class="responsive">
     <header class="header">
-        <h1>Preguntas de Seguridad</h1>
+        <h1>Preguntas de Seguridad (1/2)</h1>
     </header>
     <main>
         <div class="container">
-            <form class="form-recovery" action="<?= BASE_URL ?>index.php?controller=register&action=finishSignUp" method="post">
+            <form class="form-recovery" action="<?= BASE_URL?>index.php?controller=changePassword&action=changePasswordStep2" method="post">
                 <div class="div-recovery-password">
                 <label for="question1">Pregunta 1</label>
                     <input class="input-recovery" type="text" name="primera-pregunta" placeholder="¿Cuál es mi color favorito?" required>
@@ -53,9 +45,8 @@
                     <label for="answer3">Respuesta 3</label>
                     <input class="input-recovery" type="text" name="tercera-respuesta" placeholder="Mi Casa" required>
                 </div>
-                <?php showSignupErrors(); ?>
                 <div class="center-button2">
-                    <input type="submit" class="button-styles" name="submit" value="Aceptar">
+                    <input type="submit" class="button-styles" name="submit" value="Siguiente">
                 </div>
             </form>
         </div>

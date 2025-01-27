@@ -2,7 +2,6 @@
 <header>
     <div class="container-admin">
         <h1>DOCENTES</h1>
-        
     </div>
-    <input class="button-logout" type="button" value="Cerrar Sesión">
+    <a class="button-logout" href="views/templates/logout.php">Cerrar Sesión</a>
 </header>

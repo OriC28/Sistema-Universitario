@@ -18,7 +18,7 @@ class BDModel{
 	public function __construct(array $config){
 		
 		$this->existsConnectionParams($config);
-
+	
 		$this->host = $config['host'];
 		$this->port = $config['port'];
 		$this->dbname = $config['dbname'];
@@ -28,6 +28,7 @@ class BDModel{
 		$this->options = $config['options'];
 		$this->dsn = "mysql:dbname={$this->dbname};host={$this->host};port={$this->port};charset={$this->charset}";
 	}
+
 	/**
     * Verifica que todos los parámetros para la conexión se encuentren definidos.
     *

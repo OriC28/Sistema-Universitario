@@ -1,6 +1,20 @@
+<?php 
+    define('BASE_URL', '/Sistema-Universitario/');
+
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+        session_start();
+    }
+
+    if(!isset($_SESSION['logged-in-student']) || empty($_SESSION['logged-in-student']) || !isset($_SESSION['rol']) || empty($_SESSION['rol'])){
+        if(!$_SESSION['logged-in-student'] || $_SESSION['rol'] !== 'estudiante'){
+            header('Location: '.BASE_URL.'views/loginStudent.php');
+            exit();
+        }
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="es">
-<?php define('BASE_URL', '/Sistema-Universitario/');?>
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,7 +25,7 @@
 <body>
     <header>
         <h1>ESTUDIANTES</h1>
-        <input class="button-logout" type="button" value="Cerrar Sesión">
+        <a class="button-logout" href="views/templates/logout.php">Cerrar Sesión</a>
     </header>
 
      <!-- MENÚ -->

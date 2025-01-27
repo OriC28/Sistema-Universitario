@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+<?php define('BASE_URL', '/Sistema-Universitario/');?>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,16 +14,16 @@
     <main>
         <div class="container">
             <h2>Docente</h2>
-            <form action="../index.php?controller=teacher&action=getTeacher" method="post">
+            <form action="<?= BASE_URL ?>index.php?controller=login&action=loginTeacher" method="post">
                 <label for="email">Cedula</label>
                 <div class="div-input-email">
-                    <span><img class="icon" width="30" height="30" src="https://img.icons8.com/ios-glyphs/30/gender-neutral-user.png" alt="gender-neutral-user"/></span>
+                    <span><img src="..\assets\icons\user.png" alt="icon-user"/></span>
                     <input class="input-login" type="text" name="cedula" placeholder="Ej: 27980416" required>
                 </div>
                 
                 <label for="password">Contraseña</label>
                 <div class="div-input-password">
-                    <span><img class="icon" width="30" height="30" src="https://img.icons8.com/ios-glyphs/30/password--v1.png" alt="password--v1"/></span>
+                    <span><img src="..\assets\icons\password.png" alt="icon-password"/></span>
                     <input class="input-login" type="password" name="password" placeholder="Ingresa tu contraseña" required>
                 </div>
                 

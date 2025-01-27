@@ -12,6 +12,8 @@
 
 require_once "./model/NoteModel.php";
 require_once "./model/TeacherDataModel.php";
+require_once "./model/Session.php";
+require_once "./model/User.php";
 
 /**
 * Controlador conectado al modelo NoteModel. Permite cargar los datos (cédula, nombre y las notas) 
@@ -53,11 +55,9 @@ class StudentDataController{
     * @param string $name nombre completo del estudiante
     */
     private function setSessionData(string $cedula, string $name): void {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-        $_SESSION['cedula'] = $cedula;
-        $_SESSION['name'] = $name;
+        Session::startSession();
+        Session::set('cedula', $cedula);
+        Session::set('name', $name);
     }
     /**
     * Valida todos los datos recibidos (cedula, name y site) por la URL.
@@ -78,9 +78,9 @@ class StudentDataController{
         }
         $notes_user = new NoteModel();
 
-        $cedula_validated = $notes_user->validateCedula($cedula);
+        $cedula_validated = User::validateCedula($cedula);
 
-        if(!$notes_user->existsCedula($cedula_validated, 'estudiantes')){
+        if(!$notes_user->existsCedula($cedula_validated, true)){
             throw new Exception("La cédula no es válida.", 1);
         }
         $name = trim(htmlspecialchars($name));
