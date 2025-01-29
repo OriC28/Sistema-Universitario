@@ -7,19 +7,21 @@
         session_start();
     }
 
-    function showSignupErrors(): void {
-        if (isset($_SESSION["signupErrors"])) {
-            $errors = $_SESSION["signupErrors"];
+    require_once 'C:\xampp\htdocs\Sistema-Universitario\model\ErrorMessages.php';
+
+    // function showSignupErrors(): void {
+    //     if (isset($_SESSION["signupErrors"])) {
+    //         $errors = $_SESSION["signupErrors"];
     
-            echo "<br>";
+    //         echo "<br>";
     
-            foreach ($errors as $error) {
-                echo '<div class="container-errors"><p class="error-message">' . $error . '</p></div>';
-            }
+    //         foreach ($errors as $error) {
+    //             echo '<div class="container-errors"><p class="error-message">' . $error . '</p></div>';
+    //         }
     
-            unset($_SESSION["signupErrors"]);
-        } 
-    }
+    //         unset($_SESSION["signupErrors"]);
+    //     } 
+    // }
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -78,7 +80,7 @@
                         <input class="input-signup" type="password" name="confirm_password" placeholder="   Confirma tu contraseña" required autocomplete="off">
                     </div>
                 </div>
-                <?php showSignupErrors(); ?>
+                <?php ErrorMessages::showErrors("signupErrors"); ?>
                 <!--
                 <script>
                     setTimeout(()=>{

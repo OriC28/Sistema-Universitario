@@ -23,13 +23,13 @@
                 <label for="email">Cedula</label>
                 <div class="div-input-email">
                     <span><img src="..\assets\icons\user.png" alt="icon-user"/></span>
-                    <input class="input-login" type="text" name="cedula" placeholder="Ej: 27980416" required>
+                    <input class="input-login" type="text" name="cedula" placeholder="Ej: 27980416" required autocomplete="off">
                 </div>
                 
                 <label for="password">Contraseña</label>
                 <div class="div-input-password">
                     <span><img src="..\assets\icons\password.png" alt="icon-password"/></span>
-                    <input class="input-login" type="password" name="password" placeholder="Ingresa tu contraseña" required>
+                    <input class="input-login" type="password" name="password" placeholder="Ingresa tu contraseña" required autocomplete="off">>
                 </div>
                 
                 <div class="center-button2">

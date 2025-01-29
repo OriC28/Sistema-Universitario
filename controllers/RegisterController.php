@@ -4,14 +4,14 @@
  * VIEW: views/signup.php
  * VIEW: views/recoverypasswordForm.php
  * MODEL: 'model/RegisterModel.php'
+ * MODEL: 'model/ErrorMessages.php';
  * MODEL: 'model/User.php'
  */
-
-require_once 'model/RegisterModel.php'; 
+require_once 'model/RegisterModel.php';
+require_once 'model/ErrorMessages.php';
 require_once 'model/User.php';
 
 # Verificar si hay una session activa antes de iniciar una
-
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
@@ -25,6 +25,7 @@ class RegisterController{
     public function __construct(){
         $this->model = new RegisterModel();
         $this->errors = [];
+        // $this->errors = new ErrorMessages();
     }
     /**
      * Valida los parámetros recibidos vía post desde la vista registro y de preguntas de seguridad
@@ -32,6 +33,8 @@ class RegisterController{
     public function validateData(array $data): bool{
         if($_SERVER['REQUEST_METHOD'] != 'POST' || !$_POST['submit']){
             throw new Exception("No se ha enviado ninguna petición.", 1);
+            header("Location: views/signupForm.php");
+            die();
         }
         foreach ($data as $param){
             if(!isset($_POST[$param]) && empty($_POST[$param])){
