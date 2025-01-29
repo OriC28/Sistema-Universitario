@@ -7,20 +7,8 @@
         session_start();
     }
 
-    function showSignupErrors(): void {
-        if (isset($_SESSION["signupErrors"])) {
-            $errors = $_SESSION["signupErrors"];
-    
-            echo "<br>";
-    
-            foreach ($errors as $error) {
-                echo '<div class="container-errors"><p class="error-message">' . $error . '</p></div>';
-            }
-        }
-        unset($_SESSION["signupErrors"]);
-    }
+    require_once 'C:\xampp\htdocs\Sistema-Universitario\model\ErrorMessages.php';
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <?php define('BASE_URL', '/Sistema-Universitario/');?>
@@ -57,7 +45,7 @@
                     <label for="answer3">Respuesta 3</label>
                     <input class="input-recovery" type="text" name="tercera-respuesta" placeholder="Mi Casa" required autocomplete="off">
                 </div>
-                <?php showSignupErrors(); ?>
+                <?php ErrorMessages::showErrors("signupErrors"); ?>
                 <div class="center-button2">
                     <input type="submit" class="button-styles" name="submit" value="Aceptar">
                 </div>

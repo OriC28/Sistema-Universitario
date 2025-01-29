@@ -15,14 +15,7 @@ class ErrorMessages{
      * @param User $user instancia de clase User
      * @return void
      */
-    private function verifyInputErrors(User $user): void{
-        $methods = ['getCedula', 
-                    'verifyCedula',
-                    'getNames', 
-                    'getLastNames', 
-                    'validatePassword', 
-                    'getPassword'
-                ];
+    public function verifyInputErrors(User $user, array $methods, string $view): void{
         foreach ($methods as $method) {
             try{
                 $user->$method();
@@ -33,8 +26,10 @@ class ErrorMessages{
                 $this->errors[] = $e->getMessage();
             }
         }
-        $this->checkErrors("signupForm");
+        $this->checkErrors($view);
+        $this->cleanErrors();
     }
+
     /**
      * Almacena los errores captuadores en una variable de sesión y llama a la vista correspondiente
      * @param string $view vista a la cual se le mostrarán los errores
@@ -47,6 +42,7 @@ class ErrorMessages{
             exit();
         }
     }
+
     /**
      * Elimina los errores de la variable de sesión antes creada
      * @return void

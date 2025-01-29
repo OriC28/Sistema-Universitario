@@ -135,8 +135,8 @@ form{
 }
 .div-recovery-password{
     display: grid;
-    justify-items: stretch;
-
+    align-items: center;
+    justify-items: center;
 }
 .input-login{
     height: 30px;
@@ -243,5 +243,5 @@ form{
     margin: 0;
     border-radius: 5px;
     max-width: 300px;
-    
+    width: 100%;
 }

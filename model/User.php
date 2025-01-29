@@ -1,7 +1,6 @@
 <?php 
 
 class User{
-    private $conn;
     private $cedula;
     private $rol;
     private $first_name;
@@ -21,8 +20,8 @@ class User{
                                 string $second_last_name, 
                                 string $password, 
                                 string $confirm_password, 
-                                array $security_questions=[], 
-                                array $security_asnwers=[]){
+                                array $security_questions=[]
+                                ){
         $this->cedula = $cedula;
         $this->rol = $rol;
         $this->first_name = $first_name;

@@ -8,20 +8,6 @@
     }
 
     require_once 'C:\xampp\htdocs\Sistema-Universitario\model\ErrorMessages.php';
-
-    // function showSignupErrors(): void {
-    //     if (isset($_SESSION["signupErrors"])) {
-    //         $errors = $_SESSION["signupErrors"];
-    
-    //         echo "<br>";
-    
-    //         foreach ($errors as $error) {
-    //             echo '<div class="container-errors"><p class="error-message">' . $error . '</p></div>';
-    //         }
-    
-    //         unset($_SESSION["signupErrors"]);
-    //     } 
-    // }
 ?>
 <!DOCTYPE html>
 <html lang="es">

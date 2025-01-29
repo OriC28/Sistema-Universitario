@@ -24,9 +24,10 @@ class RegisterController{
 
     public function __construct(){
         $this->model = new RegisterModel();
-        $this->errors = [];
-        // $this->errors = new ErrorMessages();
+        // $this->errors = [];
+        $this->errors = new ErrorMessages();
     }
+
     /**
      * Valida los parámetros recibidos vía post desde la vista registro y de preguntas de seguridad
      */
@@ -42,51 +43,6 @@ class RegisterController{
             }
         }
         return true;
-    }
-    /**
-     * Verifica y obtiene los mensajes de error que arrojan los métodos dentro del modelo User
-     * @param User $user instancia de clase User
-     * @return void
-     */
-    private function verifyInputErrors(User $user): void{
-        $methods = ['getCedula', 
-                    'verifyCedula',
-                    'getNames', 
-                    'getLastNames', 
-                    'validatePassword', 
-                    'getPassword'
-                ];
-        foreach ($methods as $method) {
-            try{
-                $user->$method();
-            }catch (Exception $e){
-                if ($method == "getPassword" && $e->getMessage() == "Contraseña inválida.") {
-                    continue;
-                }
-                $this->errors[] = $e->getMessage();
-            }
-        }
-        $this->checkErrors("signupForm");
-    }
-    /**
-     * Almacena los errores captuadores en una variable de sesión y llama a la vista correspondiente
-     * @param string $view vista a la cual se le mostrarán los errores
-     * @return void
-     */
-    private function checkErrors(string $view): void{
-        if ($this->errors) {
-            $_SESSION["signupErrors"] = $this->errors;
-            require_once "views/" . basename($view) . ".php";
-            exit();
-        }
-    }
-    /**
-     * Elimina los errores de la variable de sesión antes creada
-     * @return void
-     */
-    private function cleanErrors(): void{
-        unset($_SESSION["signupErrors"]);
-        $this->errors = [];
     }
 
     public function startSignUp(){
@@ -110,12 +66,14 @@ class RegisterController{
                             $_POST['confirm_password']
                         );
             
-            $this->verifyInputErrors($user);
-
-            $this->cleanErrors();
+            $this->errors->verifyInputErrors($user, ['getCedula', 
+                                                    'verifyCedula',
+                                                    'getNames', 
+                                                    'getLastNames', 
+                                                    'validatePassword', 
+                                                    'getPassword'], "signupForm");
 
             $_SESSION["userSignupData"] = serialize($user);
-
             header("Location: views/recoverypasswordForm.php");
             exit();
         }
@@ -140,15 +98,7 @@ class RegisterController{
             $user = unserialize($_SESSION["userSignupData"]);
             $user->setSecurityQuestions($inputs);
 
-            try {
-                $user->getSecurityQuestions();
-            } catch (Exception $e){
-                $this->errors[] = $e->getMessage();
-            }
-
-            $this->checkErrors("recoverypasswordForm");
-
-            $this->cleanErrors();
+            $this->errors->verifyInputErrors($user, ['getSecurityQuestions'], "recoverypasswordForm");
 
             $this->signup($user);
             /**
