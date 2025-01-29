@@ -13,9 +13,16 @@ class User{
     private $security_questions = [];
     private $security_answer = [];
 
-    public function __construct(string $cedula, string $rol, string $first_name, string $second_name, 
-                                string $last_name,string $second_last_name, string $password, string $confirm_password, 
-                                array $security_questions=[], array $security_asnwers=[]){
+    public function __construct(string $cedula, 
+                                string $rol, 
+                                string $first_name, 
+                                string $second_name, 
+                                string $last_name,
+                                string $second_last_name, 
+                                string $password, 
+                                string $confirm_password, 
+                                array $security_questions=[], 
+                                array $security_asnwers=[]){
         $this->cedula = $cedula;
         $this->rol = $rol;
         $this->first_name = $first_name;
@@ -44,6 +51,7 @@ class User{
             throw new Exception("Cédula inválida.", 1);
         }
     }
+    
     public function getCedula(): int{
         $cedulaValidated = self::validateCedula($this->cedula);
         return $cedulaValidated;

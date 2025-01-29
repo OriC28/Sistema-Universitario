@@ -119,9 +119,9 @@ class RegisterController{
     }
 
     public function finishSignUp(){
-        $keys = ['primera-pregunta', 
+        $keys = ['primera-pregunta',
+                'primera-respuesta',
                 'segunda-pregunta',
-                'segunda-pregunta', 
                 'segunda-respuesta', 
                 'tercera-pregunta', 
                 'tercera-respuesta'
@@ -133,6 +133,7 @@ class RegisterController{
                 $_POST['segunda-pregunta'] => $_POST['segunda-respuesta'],
                 $_POST['tercera-pregunta'] => $_POST['tercera-respuesta']
             ];
+
             $user = unserialize($_SESSION["userSignupData"]);
             $user->setSecurityQuestions($inputs);
 
@@ -158,7 +159,7 @@ class RegisterController{
     private function signup(User $user){
         try {
             if ($this->model->registerUser($user)) {
-                $this->model->registerStudent($user);
+                $this->model->saveStudentData($user);
                 $this->model->saveSecurityQuestions($user);
             }
         } catch (Exception $e) {

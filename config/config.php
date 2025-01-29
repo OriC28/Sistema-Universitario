@@ -16,10 +16,10 @@
 
 return [
     "host" => "localhost",
-    "port" => "3306",
+    "port" => "3307",
     "dbname" => "sistema_universitario",
     "username" => "root",
-    "password" => "corijose2024.",
+    "password" => "", # M(E)yS(HUGGAH)QL.xSgRjReS4AvV4W
     "charset" => "utf8",
     "options" => [
         PDO::ATTR_EMULATE_PREPARES => FALSE, 

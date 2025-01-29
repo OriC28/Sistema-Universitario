@@ -41,7 +41,7 @@ class RegisterModel{
         }
     }
 
-    public function registerStudent(User $user){
+    public function saveStudentData(User $user){
         $sql = "INSERT INTO estudiantes VALUES (
                 :cedula, 
                 :primer_nombre, 

@@ -70,7 +70,7 @@ class LoginController{
                 header("Location: index.php?controller=table&action=mainTeacher");
                 exit();  
             }
-        }catch(\Thorwable $th){
+        }catch(Throwable $th){
             die($th->getMessage());
         }
     }

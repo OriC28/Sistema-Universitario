@@ -1,3 +1,8 @@
+<?php
+    header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+    header("Cache-Control: post-check=0, pre-check=0", false);
+    header("Pragma: no-cache");
+?>
 <!DOCTYPE html>
 <html lang="es">
 <?php define('BASE_URL', '/Sistema-Universitario/');?>
@@ -17,7 +22,7 @@
                 <label for="">Cédula</label>
                 <div class="div-input-password">
                 <span><img src="..\assets\icons\user.png" alt="icon-user"/></span>
-                    <input class="input-signup" type="text" name="cedula" id="">
+                    <input class="input-signup" type="text" name="cedula" id="" required autocomplete="off">
                 </div>
                     
                 <div class="center-button2">
