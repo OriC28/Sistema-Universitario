@@ -29,7 +29,7 @@
                 <label for="password">Contraseña</label>
                 <div class="div-input-password">
                     <span><img src="..\assets\icons\password.png" alt="icon-password"/></span>
-                    <input class="input-login" type="password" name="password" placeholder="Ingresa tu contraseña" required autocomplete="off">>
+                    <input class="input-login" type="password" name="password" placeholder="Ingresa tu contraseña" required autocomplete="off">
                 </div>
                 
                 <div class="center-button2">

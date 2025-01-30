@@ -13,21 +13,23 @@ class ErrorMessages{
     /**
      * Verifica y obtiene los mensajes de error que arrojan los métodos dentro del modelo User
      * @param User $user instancia de clase User
+     * @param array $methods métodos a verificar
+     * @param string $sessionError nombre de la variable de sesión a crear
+     * @param string $view vista que se cargara para mostrar los errores
      * @return void
      */
-    public function verifyInputErrors(User $user, array $methods, string $view): void{
+    public function verifyInputErrors(User $user, array $methods, string $sessionError, string $view): void{
         foreach ($methods as $method) {
             try{
                 $user->$method();
             }catch (Exception $e){
-                if ($method == "getPassword" && $e->getMessage() == "Contraseña inválida.") {
+                if ($method == "getPassword" && ($e->getMessage() == "Contraseña inválida." || $e->getMessage() == "Contraseña ausente.")) {
                     continue;
                 }
                 $this->errors[] = $e->getMessage();
             }
         }
-        $this->checkErrors($view);
-        $this->cleanErrors();
+        $this->checkErrors($sessionError, $view);
     }
 
     /**
@@ -35,11 +37,13 @@ class ErrorMessages{
      * @param string $view vista a la cual se le mostrarán los errores
      * @return void
      */
-    private function checkErrors(string $view): void{
+    private function checkErrors(string $sessionError, string $view): void{
         if ($this->errors) {
-            $_SESSION["signupErrors"] = $this->errors;
+            $_SESSION["$sessionError"] = $this->errors;
             require_once "views/" . basename($view) . ".php";
             exit();
+        } else {
+            $this->cleanErrors($sessionError);
         }
     }
 
@@ -47,8 +51,8 @@ class ErrorMessages{
      * Elimina los errores de la variable de sesión antes creada
      * @return void
      */
-    private function cleanErrors(): void{
-        unset($_SESSION["signupErrors"]);
+    private function cleanErrors(string $sessionError): void{
+        unset($_SESSION["$sessionError"]);
         $this->errors = [];
     }
 

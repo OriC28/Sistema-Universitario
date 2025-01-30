@@ -41,13 +41,17 @@ class User{
     * @throws Exception Si la cédula no es válida
     */
     public static function validateCedula(string $cedula): int{
-        if(strlen($cedula) == 7 || strlen($cedula) == 8){
-            if(filter_var($cedula, FILTER_VALIDATE_INT)){
-                $cedula = (int)$cedula;
-                return $cedula;
+        if (!empty($cedula) || isset($cedula)) {
+            if(is_numeric($cedula) && (strlen($cedula) == 7 || strlen($cedula) == 8)){
+                if(filter_var($cedula, FILTER_VALIDATE_INT)){
+                    $cedula = (int)$cedula;
+                    return $cedula;
+                }
+            }else{
+                throw new Exception("Cédula inválida.", 1);
             }
         }else{
-            throw new Exception("Cédula inválida.", 1);
+            throw new Exception("Cédula ausente.", 1);
         }
     }
     
@@ -56,9 +60,11 @@ class User{
         return $cedulaValidated;
     }
     
-    public function verifyCedula(): bool{
+    public function verifyCedula(): bool|Exception{
         $noteModel = new NoteModel();
-        if($noteModel->existsCedula($this->cedula, true)){
+        if((!isset($this->cedula) || empty($this->cedula) || !is_numeric($this->cedula))){
+            return false;
+        }elseif($noteModel->existsCedula($this->cedula, true)){
             throw new Exception("Cédula ya registrada.", 1);
         }else{
             return false;
@@ -112,7 +118,7 @@ class User{
         return [$this->last_name, $this->second_last_name];
     }
 
-    public function validatePassword(): string{ #(?=.*[^<>'\"])
+    public function validatePassword(): string{
         $pattern = "/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!?@#$%&*\-_,.])(?!.*[<>'\"])[\p{L}\d!?@#$%&*(){}\-_,.]{8,72}$/u";
         if(!isset($this->password) || empty($this->password)){
             throw new Exception("Contraseña ausente.", 1);

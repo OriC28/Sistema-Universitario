@@ -15,6 +15,7 @@ require_once 'model/User.php';
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
+
 /**
  * Controlador que maneja el proceso de registro de los datos del estudiante y las preguntas de seguridad.
  */
@@ -24,7 +25,6 @@ class RegisterController{
 
     public function __construct(){
         $this->model = new RegisterModel();
-        // $this->errors = [];
         $this->errors = new ErrorMessages();
     }
 
@@ -46,6 +46,10 @@ class RegisterController{
     }
 
     public function startSignUp(){
+        if(isset($_SESSION["userSignupData"])){
+            unset($_SESSION["userSignupData"]);
+        }
+
         $data = ['cedula', 
                 'primer-nombre',
                 'segundo-nombre', 
@@ -56,14 +60,14 @@ class RegisterController{
             ];
 
         if($this->validateData($data)){
-            $user = new User($_POST['cedula'],
+            $user = new User(trim($_POST['cedula']),
                             'estudiante', 
-                            $_POST['primer-nombre'], 
-                            $_POST['segundo-nombre'], 
-                            $_POST['primer-apellido'], 
-                            $_POST['segundo-apellido'], 
-                            $_POST['password'], 
-                            $_POST['confirm_password']
+                            trim($_POST['primer-nombre']), 
+                            trim($_POST['segundo-nombre']), 
+                            trim($_POST['primer-apellido']), 
+                            trim($_POST['segundo-apellido']), 
+                            trim($_POST['password']), 
+                            trim($_POST['confirm_password'])
                         );
             
             $this->errors->verifyInputErrors($user, ['getCedula', 
@@ -71,7 +75,7 @@ class RegisterController{
                                                     'getNames', 
                                                     'getLastNames', 
                                                     'validatePassword', 
-                                                    'getPassword'], "signupForm");
+                                                    'getPassword'], "signupErrors", "signupForm");
 
             $_SESSION["userSignupData"] = serialize($user);
             header("Location: views/recoverypasswordForm.php");
@@ -90,20 +94,17 @@ class RegisterController{
 
         if($this->validateData($keys)){
             $inputs = [
-                $_POST['primera-pregunta'] => $_POST['primera-respuesta'],
-                $_POST['segunda-pregunta'] => $_POST['segunda-respuesta'],
-                $_POST['tercera-pregunta'] => $_POST['tercera-respuesta']
+                trim($_POST['primera-pregunta']) => trim($_POST['primera-respuesta']),
+                trim($_POST['segunda-pregunta']) => trim($_POST['segunda-respuesta']),
+                trim($_POST['tercera-pregunta']) => trim($_POST['tercera-respuesta'])
             ];
 
             $user = unserialize($_SESSION["userSignupData"]);
             $user->setSecurityQuestions($inputs);
-
-            $this->errors->verifyInputErrors($user, ['getSecurityQuestions'], "recoverypasswordForm");
-
+            $this->errors->verifyInputErrors($user, ['getSecurityQuestions'], "signupErrors", "recoverypasswordForm");
+            unset($_SESSION["userSignupData"]);
+            
             $this->signup($user);
-            /**
-             * (issue): hay que evitar que el usuario pueda regresarse a la vista de las preguntas de seguridad.
-             */
             header("Location: views/loginStudent.php");
             exit();
         }

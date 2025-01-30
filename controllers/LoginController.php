@@ -1,10 +1,10 @@
 <?php
 
-require_once "./model/LoginModel.php";
-require_once "./model/Session.php";
+require_once "model/LoginModel.php";
+require_once 'model/ErrorMessages.php';
+require_once "model/Session.php";
 
 class LoginController{
-
     private function validateData(array $data): bool{
         if($_SERVER['REQUEST_METHOD'] != 'POST'){
             throw new Exception("No se ha enviado ninguna petición.", 1);
@@ -22,7 +22,6 @@ class LoginController{
             /**
              * De aquí se obtendrá la cédula con la que el usuario inicia sesión
              */
-            
             # Es necesario validarlos
             $cedula = $_POST['cedula'];
             $password = $_POST['password']; 

@@ -7,6 +7,11 @@
         session_start();
     }
 
+    if(!isset($_SESSION["userSignupData"])){
+        header("Location: signupForm.php");
+        exit();
+    }
+
     require_once 'C:\xampp\htdocs\Sistema-Universitario\model\ErrorMessages.php';
 ?>
 <!DOCTYPE html>
