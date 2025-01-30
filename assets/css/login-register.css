@@ -133,6 +133,9 @@ form{
     height: 50px;
     width: 250px;
 }
+.div-input-password{
+    width: 100%;
+}
 .div-recovery-password{
     display: grid;
     align-items: center;
@@ -230,7 +233,6 @@ form{
 
 .form-recovery{
     display: grid;
-    
     align-content: center;
     justify-content: space-around;
     gap: 25px;

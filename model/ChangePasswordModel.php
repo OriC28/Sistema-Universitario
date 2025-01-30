@@ -2,8 +2,14 @@
 
 class ChangePasswordModel{
     private $conn;
+    private $cedula;
+    private $security_questions = [];
+    private $security_answers = [];
 
-    public function __construct(){
+    public function __construct(int $cedula = 0, array $security_questions=[]){
+        $this->cedula = $cedula;
+        $this->security_questions = $security_questions;
+
         # Estableciendo la conexión a la base de datos
         $config = include("./config/config.php");
         $conn_object = new BDModel($config);
@@ -14,7 +20,20 @@ class ChangePasswordModel{
         }
     }
 
-    public function getAnswersQuestionsTo(int $cedula, bool $flag=false): array|false{
+    public function setCedula(int $cedula): void{
+        $this->cedula = $cedula;
+    }
+
+    public function setSecurityQuestions(array $data): void{
+        $i = 1;
+        foreach ($data as $key => $value) {
+            $this->security_questions["pregunta" . $i] = $key;
+            $this->security_answers["respuesta" . $i] = $value;
+            $i++;
+        }
+    }
+
+    public function getAnswersQuestionsTo(bool $flag=false): array|false{
         if($flag){
             $sql = "SELECT respuesta1, respuesta2, respuesta3 FROM preguntas_seguridad WHERE cedula = :cedula;";
         }else{
@@ -22,7 +41,7 @@ class ChangePasswordModel{
         }
 
         $cursor = $this->conn->prepare($sql);
-        $cursor->bindParam(':cedula', $cedula, PDO::PARAM_INT);
+        $cursor->bindParam(':cedula', $this->cedula, PDO::PARAM_INT);
         if($cursor->execute()){
             return $cursor->fetch(PDO::FETCH_ASSOC);
         }
@@ -45,9 +64,9 @@ class ChangePasswordModel{
         }
     }
 
-    public function verifySecurityQuestions(int $cedula, array $questions, array $answers){
-        $answersDB = $this->getAnswersQuestionsTo($cedula, true);
-        $questionsDB = $this->getAnswersQuestionsTo($cedula);
+    public function verifySecurityQuestions(): void{
+        $answersDB = $this->getAnswersQuestionsTo(true);
+        $questionsDB = $this->getAnswersQuestionsTo();
             $errors = [
             'preguntas' => [
                 'pregunta1' => 'Primera pregunta incorrecta.',
@@ -61,8 +80,8 @@ class ChangePasswordModel{
             ]
             ];
 
-        $this->verifyQuestions($questions, $questionsDB, $errors['preguntas']);
-        $this->verifyAnswers($answers, $answersDB, $errors['respuestas']);
+        $this->verifyQuestions($this->security_questions, $questionsDB, $errors['preguntas']);
+        $this->verifyAnswers($this->security_answers, $answersDB, $errors['respuestas']);
     }
 
     public function validatePassword(string $password): string{

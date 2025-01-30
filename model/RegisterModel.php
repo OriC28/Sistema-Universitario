@@ -33,15 +33,21 @@ class RegisterModel{
             $cursor->bindParam(':cedula', $cedula, PDO::PARAM_INT);
             $cursor->bindParam(':clave', $password, PDO::PARAM_STR);
             $cursor->bindParam(':rol', $rol, PDO::PARAM_STR);
-
-            return $cursor->execute();
+            
+            if($cursor->execute()){
+                $this->saveStudentData($user);
+                $this->saveSecurityQuestions($user);
+                return true;
+            }else{
+                return false;
+            }
 
         }catch(PDOException $e){
             throw new Exception("Error al registrar el usuario: ".$e->getMessage(), 1);
         }
     }
 
-    public function saveStudentData(User $user){
+    private function saveStudentData(User $user){
         $sql = "INSERT INTO estudiantes VALUES (
                 :cedula, 
                 :primer_nombre, 
@@ -70,11 +76,12 @@ class RegisterModel{
         $cursor->bindParam(':correo', $missing_data, PDO::PARAM_NULL);
         if($cursor->execute()){
             return true;
+        }else{
+            throw new Exception("No se pudo registrar los datos del usuario.", 1);
         }
-        throw new Exception("No se pudo registrar los datos del usuario.", 1);
     }
 
-    public function saveSecurityQuestions(User $user){
+    private function saveSecurityQuestions(User $user){
         $sql = "INSERT INTO preguntas_seguridad VALUES (:cedula, :pregunta1, :respuesta1, :pregunta2, :respuesta2, :pregunta3, :respuesta3);";
         $cursor = $this->conn->prepare($sql);
 
@@ -91,7 +98,8 @@ class RegisterModel{
         $cursor->bindParam(':respuesta3', $answers[2], PDO::PARAM_STR);
         if($cursor->execute()){
             return true;
+        }else{
+            throw new Exception("No se pudo registrar las preguntas de seguridad.", 1);
         }
-        throw new Exception("No se pudo registrar las preguntas de seguridad.", 1);
     }
 }

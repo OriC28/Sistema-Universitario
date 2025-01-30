@@ -34,7 +34,7 @@ class RegisterController{
     public function validateData(array $data): bool{
         if($_SERVER['REQUEST_METHOD'] != 'POST' || !$_POST['submit']){
             throw new Exception("No se ha enviado ninguna petición.", 1);
-            header("Location: views/signupForm.php");
+            header("Location: loginStudent.php");
             die();
         }
         foreach ($data as $param){
@@ -70,12 +70,11 @@ class RegisterController{
                             trim($_POST['confirm_password'])
                         );
             
-            $this->errors->verifyInputErrors($user, ['getCedula', 
-                                                    'verifyCedula',
-                                                    'getNames', 
-                                                    'getLastNames', 
-                                                    'validatePassword', 
-                                                    'getPassword'], "signupErrors", "signupForm");
+            $this->errors->verifyInputErrors(
+                $user, 
+                ['getCedula', 'verifyCedula', 'getNames',  'getLastNames',  'validatePassword', 'getPassword'], 
+                "signupErrors", 
+                "signupForm");
 
             $_SESSION["userSignupData"] = serialize($user);
             header("Location: views/recoverypasswordForm.php");
@@ -101,10 +100,10 @@ class RegisterController{
 
             $user = unserialize($_SESSION["userSignupData"]);
             $user->setSecurityQuestions($inputs);
-            $this->errors->verifyInputErrors($user, ['getSecurityQuestions'], "signupErrors", "recoverypasswordForm");
-            unset($_SESSION["userSignupData"]);
+            $this->errors->verifyInputErrors($user, ['getSecurityQuestions', 'getSecurityAnswers'], "signupErrors", "recoverypasswordForm");
             
             $this->signup($user);
+            unset($_SESSION["userSignupData"]);
             header("Location: views/loginStudent.php");
             exit();
         }
@@ -112,10 +111,7 @@ class RegisterController{
     
     private function signup(User $user){
         try {
-            if ($this->model->registerUser($user)) {
-                $this->model->saveStudentData($user);
-                $this->model->saveSecurityQuestions($user);
-            }
+            $this->model->registerUser($user);
         } catch (Exception $e) {
             die("Error: " . $e->getMessage());
         }

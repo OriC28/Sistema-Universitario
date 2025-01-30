@@ -10,18 +10,19 @@ class User{
     private $password;
     private $confirm_password;
     private $security_questions = [];
-    private $security_answer = [];
+    private $security_answers = [];
 
-    public function __construct(string $cedula, 
-                                string $rol, 
-                                string $first_name, 
-                                string $second_name, 
-                                string $last_name,
-                                string $second_last_name, 
-                                string $password, 
-                                string $confirm_password, 
-                                array $security_questions=[]
-                                ){
+    public function __construct(
+        string $cedula, 
+        string $rol = "", 
+        string $first_name = "", 
+        string $second_name = "", 
+        string $last_name = "",
+        string $second_last_name = "", 
+        string $password = "", 
+        string $confirm_password = "", 
+        array $security_questions=[]
+    ){
         $this->cedula = $cedula;
         $this->rol = $rol;
         $this->first_name = $first_name;
@@ -66,6 +67,17 @@ class User{
             return false;
         }elseif($noteModel->existsCedula($this->cedula, true)){
             throw new Exception("Cédula ya registrada.", 1);
+        }else{
+            return false;
+        }
+    }
+
+    public function checkCedula(): bool|Exception{
+        $noteModel = new NoteModel();
+        if((!isset($this->cedula) || empty($this->cedula) || !is_numeric($this->cedula))){
+            return false;
+        }elseif(!$noteModel->existsCedula($this->cedula, true)){
+            throw new Exception("La cedula no se encuentra registrada.", 1);
         }else{
             return false;
         }
@@ -118,7 +130,7 @@ class User{
         return [$this->last_name, $this->second_last_name];
     }
 
-    public function validatePassword(): string{
+    public function validatePassword(): bool{
         $pattern = "/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!?@#$%&*\-_,.])(?!.*[<>'\"])[\p{L}\d!?@#$%&*(){}\-_,.]{8,72}$/u";
         if(!isset($this->password) || empty($this->password)){
             throw new Exception("Contraseña ausente.", 1);
@@ -141,11 +153,18 @@ class User{
         return password_hash($passwordsValidated[0], PASSWORD_DEFAULT);
     }
 
+    public function setPasswords(array $data): void{
+        $this->password = $data[0];
+        $this->confirm_password = $data[1];
+        return;
+    }
+
     public function setSecurityQuestions(array $data): void{
         foreach ($data as $key => $value) {
             $this->security_questions[] = $key;
-            $this->security_answer[] = $value;
+            $this->security_answers[] = $value;
         }
+        return;
     }
 
     public function getSecurityQuestions(): array{
@@ -160,11 +179,11 @@ class User{
 
     public function getSecurityAnswers(): array{
         $errorLenght = "La respuesta(s) de seguridad debe(n) tener menos de 100 caracteres.";
-        foreach ($this->security_answer as $answer) {
+        foreach ($this->security_answers as $answer) {
             $this->validateQuestionAndAnswer($answer, "Respuesta(s) de seguridad ausente(s).", "Respuesta(s) de seguridad inválida(s).", $errorLenght);
         }
-        return [password_hash($this->security_answer[0], PASSWORD_DEFAULT),
-                password_hash($this->security_answer[1], PASSWORD_DEFAULT),
-                password_hash($this->security_answer[2], PASSWORD_DEFAULT)];
+        return [password_hash($this->security_answers[0], PASSWORD_DEFAULT),
+                password_hash($this->security_answers[1], PASSWORD_DEFAULT),
+                password_hash($this->security_answers[2], PASSWORD_DEFAULT)];
     }
 }

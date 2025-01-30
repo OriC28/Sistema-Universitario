@@ -11,22 +11,27 @@ class ErrorMessages{
     }
 
     /**
-     * Verifica y obtiene los mensajes de error que arrojan los métodos dentro del modelo User
-     * @param User $user instancia de clase User
+     * Verifica y obtiene los mensajes de error que arrojan los métodos de validación de una clase
+     * @param object $object instancia de la clase
      * @param array $methods métodos a verificar
      * @param string $sessionError nombre de la variable de sesión a crear
      * @param string $view vista que se cargara para mostrar los errores
      * @return void
      */
-    public function verifyInputErrors(User $user, array $methods, string $sessionError, string $view): void{
+    public function verifyInputErrors(object $object, array $methods, string $sessionError, string $view): void{
         foreach ($methods as $method) {
             try{
-                $user->$method();
+                $object->$method();
             }catch (Exception $e){
-                if ($method == "getPassword" && ($e->getMessage() == "Contraseña inválida." || $e->getMessage() == "Contraseña ausente.")) {
-                    continue;
+                $message = $e->getMessage();
+
+                if ($sessionError == "signupErrors" || $sessionError == "changePasswordErrors") {
+                    if ($method == "getPassword" && ($message == "Contraseña inválida." || $message == "Contraseña ausente.")) {
+                        continue;
+                    }
                 }
-                $this->errors[] = $e->getMessage();
+
+                $this->errors[] = $message;
             }
         }
         $this->checkErrors($sessionError, $view);

@@ -8,6 +8,8 @@ class LoginController{
     private function validateData(array $data): bool{
         if($_SERVER['REQUEST_METHOD'] != 'POST'){
             throw new Exception("No se ha enviado ninguna petición.", 1);
+            header("Location: signupForm.php");
+            die();
         }
         foreach ($data as $param){
             if(!isset($_POST[$param]) && empty($_POST[$param])){

@@ -9,10 +9,16 @@
         session_start();
     }
 
-    if(!isset($_SESSION['securityStepReady']) || empty($_SESSION['securityStepReady'])){
-        header('Location: '.BASE_URL.'views/changePasswordStep1.php');
+    if (isset($_SESSION["stepReady"])) {
+        unset($_SESSION["stepReady"]);
+    }
+    
+    if(!isset($_SESSION["changePasswordData"])){
+        header("Location: loginStudent.php");
         exit();
     }
+
+    require_once 'C:\xampp\htdocs\Sistema-Universitario\model\ErrorMessages.php';
 ?>
 
 <!DOCTYPE html>
@@ -50,6 +56,7 @@
                     <label for="answer3">Respuesta 3</label>
                     <input class="input-recovery" type="text" name="tercera-respuesta" placeholder="Mi Casa" required autocomplete="off">
                 </div>
+                <?php ErrorMessages::showErrors('changePasswordErrors'); ?>
                 <div class="center-button2">
                     <input type="submit" class="button-styles" name="submit" value="Siguiente">
                 </div>

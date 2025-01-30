@@ -9,10 +9,12 @@
         session_start();
     }
 
-    if(!isset($_SESSION['cedula']) || empty($_SESSION['cedula']) || !isset($_SESSION['securityStepReady']) || empty($_SESSION['securityStepReady'])){
-        header('Location: '.BASE_URL.'views/changePasswordStep1.php');
+    if(!isset($_SESSION["changePasswordData"]) || !$_SESSION["stepReady"]){
+        header("Location: loginStudent.php");
         exit();
     }
+
+    require_once 'C:\xampp\htdocs\Sistema-Universitario\model\ErrorMessages.php';
 ?>
 
 <!DOCTYPE html>
@@ -20,7 +22,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../assets/css/login-register.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/login-register.css?v=<?php echo time(); ?>" />
     <title>Cambiar contraseña</title>
 </head>
 <body class="responsive">
@@ -29,18 +31,19 @@
     </header>
     <main>
         <div class="container">
-            <form action="<?=BASE_URL?>index.php?controller=changePassword&action=changePasswordStep3" method="post">
+            <form action="<?= BASE_URL ?>index.php?controller=changePassword&action=changePasswordStep3" method="post">
                 <label for="">Contraseña nueva</label>
                 <div class="div-input-password">
-                    <span><img src="..\assets\icons\password.png" alt="icon-password"/></span>
-                    <input class="input-signup" type="text" name="new-password" id="">
+                    <span><img src="<?= BASE_URL ?>assets\icons\password.png" alt="icon-password"/></span>
+                    <input class="input-signup" type="text" name="new-password" id="" autocomplete="off">
                 </div>
                     
                 <label for="">Confirmar contraseña</label>
                 <div class="div-input-password">
-                    <span><img src="..\assets\icons\password.png" alt="icon-password"/></span>
-                    <input class="input-signup" type="text" name="password" id="">
+                    <span><img src="<?= BASE_URL ?>assets\icons\password.png" alt="icon-password"/></span>
+                    <input class="input-signup" type="text" name="password" id="" autocomplete="off">
                 </div>
+                <?php ErrorMessages::showErrors('changePasswordErrors'); ?>
                 <div class="center-button2">
                     <input class="button-styles" type="submit" name="submit" value="Confirmar">
                 </div>

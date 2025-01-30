@@ -8,7 +8,7 @@
     }
 
     if(!isset($_SESSION["userSignupData"])){
-        header("Location: signupForm.php");
+        header("Location: loginStudent.php");
         exit();
     }
 

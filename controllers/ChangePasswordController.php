@@ -1,8 +1,9 @@
 <?php 
 
-require_once './model/User.php';
-require_once './model/NoteModel.php';
-require_once './model/ChangePasswordModel.php';
+require_once 'model/User.php';
+require_once 'model/NoteModel.php';
+require_once 'model/ChangePasswordModel.php';
+require_once 'model/ErrorMessages.php';
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
@@ -16,7 +17,7 @@ class ChangePasswordController extends RegisterController{
     public function __construct(){
         $this->noteModel = new NoteModel();
         $this->changePasswordModel = new ChangePasswordModel();
-        $this->errors = [];
+        $this->errors = new ErrorMessages();
     }
 
     public function getCedula(){
@@ -28,12 +29,12 @@ class ChangePasswordController extends RegisterController{
     }
 
     public function changePasswordStep1(){
-        $dataStep1 = ['cedula'];
-        if($this->validateData($dataStep1)){
-            $cedula = $this->getCedula();
+        if($this->validateData(['cedula'])){
+            $user = new User(trim($_POST['cedula']));
 
-            $_SESSION['cedula'] = serialize($cedula);
-            $_SESSION['securityStepReady'] = true;
+            $this->errors->verifyInputErrors($user, ['getCedula', 'checkCedula'], 'changePasswordErrors', 'changePasswordStep1');
+
+            $_SESSION['changePasswordData'] = serialize($user);
 
             header("Location: views/changePasswordStep2.php");
             exit();
@@ -47,26 +48,28 @@ class ChangePasswordController extends RegisterController{
                 'segunda-respuesta', 
                 'tercera-pregunta', 
                 'tercera-respuesta'
-            ]; 
+            ];
         
         if($this->validateData($keys)){
-            $questions = [
-                'pregunta1' => $_POST[$keys[0]],
-                'pregunta2' => $_POST[$keys[2]],
-                'pregunta3' => $_POST[$keys[4]],
+            $inputs = [
+                trim($_POST['primera-pregunta']) => trim($_POST['primera-respuesta']),
+                trim($_POST['segunda-pregunta']) => trim($_POST['segunda-respuesta']),
+                trim($_POST['tercera-pregunta']) => trim($_POST['tercera-respuesta'])
             ];
-
-            $answers = [
-                'respuesta1' => $_POST[$keys[1]],
-                'respuesta2' => $_POST[$keys[3]],
-                'respuesta3' => $_POST[$keys[5]],
-            ];
-
-            $cedula = unserialize($_SESSION['cedula']);
             
-            $this->changePasswordModel->verifySecurityQuestions($cedula, $questions, $answers);
+            $user = unserialize($_SESSION['changePasswordData']);
+            if ($_SESSION['changePasswordData']) {
+                $user->setSecurityQuestions($inputs);
+            }
+            $this->changePasswordModel->setCedula($user->getCedula());
+            $this->changePasswordModel->setSecurityQuestions($inputs);
+            $this->errors->verifyInputErrors($user, ['getSecurityQuestions', 'getSecurityAnswers'], 'changePasswordErrors', 'changePasswordStep2');
+            $this->errors->verifyInputErrors($this->changePasswordModel, ["verifySecurityQuestions"], 'changePasswordErrors', 'changePasswordStep2');
             
-            $_SESSION['securityStepReady'] = true;
+            unset($_SESSION['changePasswordData']);
+            $_SESSION['changePasswordData'] = serialize($user);
+            $_SESSION["stepReady"] = false;
+            $_SESSION["stepReady"] = true;
             
             header('Location: views/changePasswordStep3.php');
             exit();
@@ -75,20 +78,26 @@ class ChangePasswordController extends RegisterController{
 
     public function changePasswordStep3(){
         if($this->validateData(['new-password', 'password'])){
-            $passwordsValidated = [];
-            $cedula = unserialize($_SESSION['cedula']);
-            $newPassword = $_POST['new-password'];
-            $confirmPassword = $_POST['password'];
-
-            if($this->changePasswordModel->validatePassword($newPassword) && 
-                $this->changePasswordModel->validatePassword($confirmPassword)){
-                if($newPassword != $confirmPassword){
-                    throw new Exception("Las contraseñas no coinciden.", 1);
-                } 
-                $this->changePasswordModel->updatePassword($cedula, $newPassword);
-                header('Location: views/loginStudent.php');
-                exit();
+            $passwords = [
+                trim($_POST['new-password']),
+                trim($_POST['password'])
+            ];
+            
+            if (isset($_SESSION['changePasswordData'])) {
+                $user = unserialize($_SESSION['changePasswordData']);
+                $user->setPasswords($passwords);
+                $this->errors->verifyInputErrors($user, ['validatePassword', 'getPassword'], 'changePasswordErrors', 'changePasswordStep3');
+                $this->changePasswordModel->updatePassword($user->getCedula(), $passwords[0]);
             }
+            // if($this->changePasswordModel->validatePassword($newPassword) && 
+            //     $this->changePasswordModel->validatePassword($confirmPassword)){
+            //     if($newPassword != $confirmPassword){
+            //         throw new Exception("Las contraseñas no coinciden.", 1);
+            //     } 
+            unset($_SESSION['changePasswordData']);
+            header('Location: views/loginStudent.php');
+            exit();
+            // }
         }
     }
 }
