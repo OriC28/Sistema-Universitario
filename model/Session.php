@@ -10,12 +10,11 @@ class Session{
     public static function startSession(): void{
         if(session_status() === PHP_SESSION_NONE){
             session_start([
-                "lifetime" => 3600,
-                "domain" => "localhost",
-                "path" => "/",
-                "secure" => true,
-                "httponly" => true,
-                "strict" => true
+                "cookie_lifetime" => 18000,
+                "cookie_domain" => "localhost",
+                "cookie_path" => "/",
+                "cookie_secure" => true,
+                "cookie_httponly" => true
             ]);
         }
 

@@ -1,6 +1,6 @@
 <?php
 
-require_once 'model/Session.php';
+require_once 'C:\xampp\htdocs\Sistema-Universitario\model\Session.php';
 
 Session::startSession();
 
