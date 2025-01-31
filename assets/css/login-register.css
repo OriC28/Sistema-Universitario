@@ -132,9 +132,7 @@ form{
     border-radius: 5px;
     height: 50px;
     width: 250px;
-}
-.div-input-password{
-    width: 100%;
+    /* width: 100%; Esto arregla los campos cuando hay errores, expandiendolos por todo el contenedor, pero distorsiona los botones*/
 }
 .div-recovery-password{
     display: grid;

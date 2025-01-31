@@ -77,20 +77,32 @@ class User{
         if((!isset($this->cedula) || empty($this->cedula) || !is_numeric($this->cedula))){
             return false;
         }elseif(!$noteModel->existsCedula($this->cedula, true)){
-            throw new Exception("La cedula no se encuentra registrada.", 1);
+            throw new Exception("La cédula no se encuentra registrada.", 1);
         }else{
             return false;
         }
     }
 
-    public function getRol(): string{
+    public function getRol(bool $flag=false): string{
        if($this->rol != 'estudiante' && $this->rol != 'profesor'){
            throw new Exception("Rol inválido.", 1);
        }
        return $this->rol;
     }
 
-    public function validateFieldsInRegister(string $field, string $firstMessageError, string $secondMessageError, string $thirdMessageError): string{
+    public function verifyRol(string $rol): bool{
+        if ($this->rol !== $rol) {
+            if ($rol !== "estudiante") {
+                throw new Exception("El usuario no está registrado como estudiante.", 1);
+            } else {
+                throw new Exception("El usuario no está registrado como profesor.", 1);
+            }
+        } else {
+            return true;
+        }
+    }
+
+    public function validateNames(string $field, string $firstMessageError, string $secondMessageError, string $thirdMessageError): string{
         if(!isset($field) || empty($field)){
             throw new Exception($firstMessageError, 1);
         }elseif(!is_string($field) || !preg_match('/^[a-zA-ZáéíóúüñÁÉÍÓÚÑ\s]+$/u', $field)){
@@ -116,8 +128,8 @@ class User{
         $lengthErrorFirstName = "El primer nombre debe tener una longitud de 2 a 50 caracteres.";
         $lengthErrorSecondName = str_replace('primer', 'segundo',  $lengthErrorFirstName);
    
-        $this->validateFieldsInRegister($this->first_name, "Primer nombre ausente.", "Primer nombre inválido.", $lengthErrorFirstName);
-        $this->validateFieldsInRegister($this->second_name, "Segundo nombre ausente.", "Segundo nombre inválido.", $lengthErrorSecondName);
+        $this->validateNames($this->first_name, "Primer nombre ausente.", "Primer nombre inválido.", $lengthErrorFirstName);
+        $this->validateNames($this->second_name, "Segundo nombre ausente.", "Segundo nombre inválido.", $lengthErrorSecondName);
         return [$this->first_name, $this->second_name];
     }
 
@@ -125,38 +137,43 @@ class User{
         $lengthErrorFirstLastName = "El primer apellido debe tener una longitud de 2 a 50 caracteres.";
         $lengthErrorSecondLastName = str_replace('primer', 'segundo', $lengthErrorFirstLastName);
 
-        $this->validateFieldsInRegister($this->last_name, "Primer apellido ausente.", "Primer apellido inválido.", $lengthErrorFirstLastName);
-        $this->validateFieldsInRegister($this->second_last_name, "Segundo apellido ausente.", "Segundo apellido inválido.", $lengthErrorSecondLastName);
+        $this->validateNames($this->last_name, "Primer apellido ausente.", "Primer apellido inválido.", $lengthErrorFirstLastName);
+        $this->validateNames($this->second_last_name, "Segundo apellido ausente.", "Segundo apellido inválido.", $lengthErrorSecondLastName);
         return [$this->last_name, $this->second_last_name];
     }
-
-    public function validatePassword(): bool{
-        $pattern = "/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!?@#$%&*\-_,.])(?!.*[<>'\"])[\p{L}\d!?@#$%&*(){}\-_,.]{8,72}$/u";
-        if(!isset($this->password) || empty($this->password)){
-            throw new Exception("Contraseña ausente.", 1);
-        }
-        elseif(!preg_match($pattern, $this->password)){
-            throw new Exception("Contraseña inválida.", 1);
-        }
-        return true;
-    }
-
-    public function getPassword(): string{
-        $passwordsValidated = "";
-
-        if($this->validatePassword($this->password) && $this->validatePassword($this->confirm_password)){
-            if($this->password != $this->confirm_password){
-                throw new Exception("Las contraseñas no coinciden.", 1);
-            } 
-            $passwordsValidated = [$this->password, $this->confirm_password];
-        }
-        return password_hash($passwordsValidated[0], PASSWORD_DEFAULT);
-    }
-
+    
     public function setPasswords(array $data): void{
         $this->password = $data[0];
         $this->confirm_password = $data[1];
         return;
+    }
+
+    public function getPassword(): array{
+        if($this->validatePassword()){
+            return [$this->password, password_hash($this->password, PASSWORD_DEFAULT)];
+        }
+    }
+
+    public function validatePassword(): bool{
+        $pattern = "/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!?@#$%&*\-_,.])(?!.*[<>'\"])[\p{L}\d!?@#$%&*(){}\-_,.]{8,72}$/u";
+        $nojoda = ["password", "confirm_password"];
+        foreach ($nojoda as $vaina) {
+            if(!preg_match($pattern, $this->$vaina) || !isset($this->$vaina) || empty($this->$vaina)){
+                throw new Exception("Contraseña(s) inválida(s).", 1);
+            }
+        }
+        if($this->password !== $this->confirm_password){
+            throw new Exception("Las contraseñas no coinciden.", 1);
+        }
+        return true;
+    }
+
+    public function verifyPasswords(string $hashedPassword) {
+        if(password_verify($this->getPassword()[0], $hashedPassword)){
+            return true;
+        }else{
+            throw new Exception("Contraseña incorrecta.");
+        }
     }
 
     public function setSecurityQuestions(array $data): void{

@@ -4,10 +4,9 @@ require_once 'model/User.php';
 require_once 'model/NoteModel.php';
 require_once 'model/ChangePasswordModel.php';
 require_once 'model/ErrorMessages.php';
+require_once 'model/Session.php';
 
-if (session_status() !== PHP_SESSION_ACTIVE) {
-    session_start();
-}
+Session::startSession();
 
 class ChangePasswordController extends RegisterController{
     private $noteModel;
@@ -18,14 +17,6 @@ class ChangePasswordController extends RegisterController{
         $this->noteModel = new NoteModel();
         $this->changePasswordModel = new ChangePasswordModel();
         $this->errors = new ErrorMessages();
-    }
-
-    public function getCedula(){
-        $cedula = User::validateCedula($_POST['cedula']);
-        if(!$this->noteModel->existsCedula($cedula, true)){
-            throw new Exception("El usuario no se encuentra registrado.", 1);
-        }
-        return $cedula;
     }
 
     public function changePasswordStep1(){
@@ -58,9 +49,7 @@ class ChangePasswordController extends RegisterController{
             ];
             
             $user = unserialize($_SESSION['changePasswordData']);
-            if ($_SESSION['changePasswordData']) {
-                $user->setSecurityQuestions($inputs);
-            }
+            if ($_SESSION['changePasswordData']) { $user->setSecurityQuestions($inputs); }
             $this->changePasswordModel->setCedula($user->getCedula());
             $this->changePasswordModel->setSecurityQuestions($inputs);
             $this->errors->verifyInputErrors($user, ['getSecurityQuestions', 'getSecurityAnswers'], 'changePasswordErrors', 'changePasswordStep2');
@@ -86,14 +75,10 @@ class ChangePasswordController extends RegisterController{
             if (isset($_SESSION['changePasswordData'])) {
                 $user = unserialize($_SESSION['changePasswordData']);
                 $user->setPasswords($passwords);
-                $this->errors->verifyInputErrors($user, ['validatePassword', 'getPassword'], 'changePasswordErrors', 'changePasswordStep3');
+                $this->errors->verifyInputErrors($user, ['getPassword'], 'changePasswordErrors', 'changePasswordStep3');
                 $this->changePasswordModel->updatePassword($user->getCedula(), $passwords[0]);
             }
-            // if($this->changePasswordModel->validatePassword($newPassword) && 
-            //     $this->changePasswordModel->validatePassword($confirmPassword)){
-            //     if($newPassword != $confirmPassword){
-            //         throw new Exception("Las contraseñas no coinciden.", 1);
-            //     } 
+
             unset($_SESSION['changePasswordData']);
             header('Location: views/loginStudent.php');
             exit();

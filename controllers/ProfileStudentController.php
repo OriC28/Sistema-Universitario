@@ -1,6 +1,5 @@
 <?php
 
-
 require_once './model/ProfileStudentModel.php';
 require_once './model/NoteModel.php';
 require_once 'ViewerNoteController.php';
@@ -25,7 +24,5 @@ class ProfileStudentController extends ViewerNoteController{
         }catch (\Throwable $th) {
             echo $th->getMessage();
         }
-        
-
     }
 }

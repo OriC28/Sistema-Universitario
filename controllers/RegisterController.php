@@ -3,18 +3,16 @@
 /**
  * VIEW: views/signup.php
  * VIEW: views/recoverypasswordForm.php
- * MODEL: 'model/RegisterModel.php'
+ * MODEL: 'model/UserModel.php'
  * MODEL: 'model/ErrorMessages.php';
  * MODEL: 'model/User.php'
  */
-require_once 'model/RegisterModel.php';
+require_once 'model/UserModel.php';
 require_once 'model/ErrorMessages.php';
 require_once 'model/User.php';
+require_once 'model/Session.php';
 
-# Verificar si hay una session activa antes de iniciar una
-if (session_status() !== PHP_SESSION_ACTIVE) {
-    session_start();
-}
+Session::startSession();
 
 /**
  * Controlador que maneja el proceso de registro de los datos del estudiante y las preguntas de seguridad.
@@ -24,7 +22,7 @@ class RegisterController{
     private $errors;
 
     public function __construct(){
-        $this->model = new RegisterModel();
+        $this->model = new UserModel();
         $this->errors = new ErrorMessages();
     }
 
@@ -34,12 +32,10 @@ class RegisterController{
     public function validateData(array $data): bool{
         if($_SERVER['REQUEST_METHOD'] != 'POST' || !$_POST['submit']){
             throw new Exception("No se ha enviado ninguna petición.", 1);
-            header("Location: loginStudent.php");
-            die();
         }
         foreach ($data as $param){
             if(!isset($_POST[$param]) && empty($_POST[$param])){
-                throw new Exception("Por favor, rellene todos los campos", 1);
+                throw new Exception("No se han enviado todos los datos requeridos.", 1);
             }
         }
         return true;
@@ -72,7 +68,7 @@ class RegisterController{
             
             $this->errors->verifyInputErrors(
                 $user, 
-                ['getCedula', 'verifyCedula', 'getNames',  'getLastNames',  'validatePassword', 'getPassword'], 
+                ['getCedula', 'verifyCedula', 'getNames',  'getLastNames', 'getPassword'], 
                 "signupErrors", 
                 "signupForm");
 
@@ -111,7 +107,8 @@ class RegisterController{
     
     private function signup(User $user){
         try {
-            $this->model->registerUser($user);
+            $this->model->setUser($user);
+            $this->model->registerUser();
         } catch (Exception $e) {
             die("Error: " . $e->getMessage());
         }

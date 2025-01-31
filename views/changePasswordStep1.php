@@ -1,19 +1,18 @@
 <?php
+    require_once 'C:\xampp\htdocs\Sistema-Universitario\model\ErrorMessages.php';
+    require_once 'C:\xampp\htdocs\Sistema-Universitario\model\Session.php.php';
+    
+    Session::startSession();
+    
     define('BASE_URL', '/Sistema-Universitario/');
-
     header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
     header("Cache-Control: post-check=0, pre-check=0", false);
     header("Pragma: no-cache");
-
-    if (session_status() !== PHP_SESSION_ACTIVE) {
-        session_start();
-    }
 
     if (isset($_SESSION['changePasswordData'])) {
         unset($_SESSION['changePasswordData']);
     }
 
-    require_once 'C:\xampp\htdocs\Sistema-Universitario\model\ErrorMessages.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">

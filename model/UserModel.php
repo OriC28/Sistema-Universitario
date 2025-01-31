@@ -2,8 +2,9 @@
 
 require_once 'NoteModel.php';
 
-class RegisterModel{
+class UserModel{
     private $conn;
+    private $user;
 
     public function __construct(){
         # ESTABLECIENDO CONEXIÓN A LA BASE DE DATOS
@@ -16,16 +17,38 @@ class RegisterModel{
         }
     }
 
-    public function registerUser(User $user){
-        $cedula = $user->getCedula();
-        $password = $user->getPassword();
-        $rol = $user->getRol();
+    public function setUser(User $user): void{
+        $this->user = $user;
+    }
+
+    public function getUserData(){
+        try{
+            $cedula = $this->user->getCedula();
+            $sql = "SELECT * FROM usuarios WHERE cedula = :cedula";
+            $cursor = $this->conn->prepare($sql);
+            $cursor->bindParam(':cedula', $cedula, PDO::PARAM_INT);
+
+            if($cursor->execute()){
+                return $cursor->fetch(PDO::FETCH_ASSOC);
+            }else{
+                throw new Exception("Usuario no registrado.", 1);
+            }
+        }catch (PDOException $e){
+            throw new Exception("Error: ".$e->getMessage(), 1);
+        }
+    }
+
+    public function registerUser(): bool{
+        $cedula = $this->user->getCedula();
+        $password = $this->user->getPassword()[1];
+        $rol = $this->user->getRol();
 
         $noteModel = new NoteModel();
 
         if($noteModel->existsCedula($cedula, true)){
-            throw new Exception("El usuario ya se encuentra registrado.", 1);
+            throw new Exception("El usuario ya está registrado.", 1);
         }
+
         try{
             $sql = "INSERT INTO usuarios (cedula, clave, rol) VALUES (:cedula, :clave, :rol);";
             
@@ -35,19 +58,18 @@ class RegisterModel{
             $cursor->bindParam(':rol', $rol, PDO::PARAM_STR);
             
             if($cursor->execute()){
-                $this->saveStudentData($user);
-                $this->saveSecurityQuestions($user);
+                $this->saveStudentData();
+                $this->saveSecurityQuestions();
                 return true;
             }else{
                 return false;
             }
-
         }catch(PDOException $e){
             throw new Exception("Error al registrar el usuario: ".$e->getMessage(), 1);
         }
     }
 
-    private function saveStudentData(User $user){
+    private function saveStudentData(): bool{
         $sql = "INSERT INTO estudiantes VALUES (
                 :cedula, 
                 :primer_nombre, 
@@ -60,11 +82,11 @@ class RegisterModel{
         
         $cursor = $this->conn->prepare($sql);
 
-        $cedula = $user->getCedula();
-        $first_name =  $user->getNames()[0];
-        $second_name =  $user->getNames()[1];
-        $first_last_name = $user->getLastNames()[0];
-        $second_last_name = $user->getLastNames()[1];
+        $cedula = $this->user->getCedula();
+        $first_name =  $this->user->getNames()[0];
+        $second_name =  $this->user->getNames()[1];
+        $first_last_name = $this->user->getLastNames()[0];
+        $second_last_name = $this->user->getLastNames()[1];
         $missing_data = NULL;
 
         $cursor->bindParam(':cedula', $cedula, PDO::PARAM_INT);
@@ -81,13 +103,13 @@ class RegisterModel{
         }
     }
 
-    private function saveSecurityQuestions(User $user){
+    private function saveSecurityQuestions(): bool{
         $sql = "INSERT INTO preguntas_seguridad VALUES (:cedula, :pregunta1, :respuesta1, :pregunta2, :respuesta2, :pregunta3, :respuesta3);";
         $cursor = $this->conn->prepare($sql);
 
-        $cedula = $user->getCedula();
-        $questions = $user->getSecurityQuestions();
-        $answers = $user->getSecurityAnswers();
+        $cedula = $this->user->getCedula();
+        $questions = $this->user->getSecurityQuestions();
+        $answers = $this->user->getSecurityAnswers();
 
         $cursor->bindParam(':cedula', $cedula, PDO::PARAM_INT);
         $cursor->bindParam(':pregunta1', $questions[0], PDO::PARAM_STR);

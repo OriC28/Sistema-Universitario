@@ -9,7 +9,28 @@ class Session{
      */
     public static function startSession(): void{
         if(session_status() === PHP_SESSION_NONE){
-            session_start();
+            session_start([
+                "lifetime" => 3600,
+                "domain" => "localhost",
+                "path" => "/",
+                "secure" => true,
+                "httponly" => true,
+                "strict" => true
+            ]);
+        }
+
+        self::regenerateSessionId();
+    }
+
+    private static function regenerateSessionId() {
+        $interval = 60 * 30; // 30 minutos
+
+        if (!isset($_SESSION["last_regeneration"])) {
+            session_regenerate_id(true);
+            $_SESSION["last_regeneration"] = time();
+        } else if (time() - $_SESSION["last_regeneration"] >= $interval) {
+            session_regenerate_id(true);
+            $_SESSION["last_regeneration"] = time();
         }
     }
     /**
@@ -45,8 +66,8 @@ class Session{
      */
     public static function destroySession(string $name):void{
         self::startSession($name);
+        session_unset();
         session_destroy();
-        $_SESSION = [];
     }
     /**
      * Verifica si la sessión está definida

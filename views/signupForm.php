@@ -1,13 +1,12 @@
 <?php
+    require_once 'C:\xampp\htdocs\Sistema-Universitario\model\ErrorMessages.php';
+    require_once 'C:\xampp\htdocs\Sistema-Universitario\model\Session.php.php';
+    
+    Session::startSession();
+
     header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
     header("Cache-Control: post-check=0, pre-check=0", false);
     header("Pragma: no-cache");
-
-    if (session_status() !== PHP_SESSION_ACTIVE) {
-        session_start();
-    }
-
-    require_once 'C:\xampp\htdocs\Sistema-Universitario\model\ErrorMessages.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -67,21 +66,9 @@
                     </div>
                 </div>
                 <?php ErrorMessages::showErrors("signupErrors"); ?>
-                <!--
-                <script>
-                    setTimeout(()=>{
-                        let containerMessage = document.querySelectorAll("div.container-errors");
-                        if(containerMessage){
-                            containerMessage.forEach(message => {
-                                message.remove();
-                            });
-                        }
-                    }, 3000);
-                </script>
-                -->
                 <div class="center-button2">
                     <input type="submit" name="submit" class="button-styles" value="Siguiente">
-                    <span><a id="link-signup" href="loginStudent.php">O inicia sesión</a></span>
+                    <span><a id="link-signup" href="views/loginStudent.php">O inicia sesión</a></span>
                 </div>
             </form>
         </div>

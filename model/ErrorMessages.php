@@ -1,5 +1,9 @@
 <?php
 
+require_once 'model/Session.php';
+
+Session::startSession();
+
 /**
  * Clase para manejar los errores en los formularios
  */
@@ -14,22 +18,26 @@ class ErrorMessages{
      * Verifica y obtiene los mensajes de error que arrojan los métodos de validación de una clase
      * @param object $object instancia de la clase
      * @param array $methods métodos a verificar
-     * @param string $sessionError nombre de la variable de sesión a crear
+     * @param string $sessionError nombre de la variable de sesión a crear para almacenar los errores
      * @param string $view vista que se cargara para mostrar los errores
      * @return void
      */
-    public function verifyInputErrors(object $object, array $methods, string $sessionError, string $view): void{
+    public function verifyInputErrors(object $object, array $methods, string $sessionError, string $view, $parameter=null): void{
         foreach ($methods as $method) {
             try{
-                $object->$method();
+                if ($parameter === null) {
+                    $object->$method();
+                } else {
+                    $object->$method($parameter);
+                }
             }catch (Exception $e){
                 $message = $e->getMessage();
 
-                if ($sessionError == "signupErrors" || $sessionError == "changePasswordErrors") {
-                    if ($method == "getPassword" && ($message == "Contraseña inválida." || $message == "Contraseña ausente.")) {
-                        continue;
-                    }
-                }
+                // if ($sessionError == "signupErrors" || $sessionError == "changePasswordErrors") {
+                //     if ($method == "getPassword" && ($message == "Contraseña inválida." || $message == "Contraseña ausente.")) {
+                //         continue;
+                //     }
+                // }
 
                 $this->errors[] = $message;
             }

@@ -1,3 +1,23 @@
+<?php
+    require_once 'C:\xampp\htdocs\Sistema-Universitario\model\Session.php.php';
+    
+    Session::startSession();
+    
+    define('BASE_URL', '/Sistema-Universitario/');
+    header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+    header("Cache-Control: post-check=0, pre-check=0", false);
+    header("Pragma: no-cache");
+
+    if(isset($_SESSION['cedula'])){
+        if ($_SESSION['logged-in-student'] === true) {
+            header("Location: " . BASE_URL . "index.php?controller=profileStudent&action=getStudentData");
+            exit();
+        } elseif ($_SESSION['logged-in-teacher'] === true) {
+            header("Location: " . BASE_URL . "index.php?controller=table&action=mainTeacher");
+            exit();
+        }
+    }
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
