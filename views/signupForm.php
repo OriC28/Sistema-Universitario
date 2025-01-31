@@ -3,14 +3,14 @@
     require_once 'C:\xampp\htdocs\Sistema-Universitario\model\Session.php';
     
     Session::startSession();
-
+    
+    define('BASE_URL', '/Sistema-Universitario/');
     header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
     header("Cache-Control: post-check=0, pre-check=0", false);
     header("Pragma: no-cache");
 ?>
 <!DOCTYPE html>
 <html lang="es">
-<?php define('BASE_URL', '/Sistema-Universitario/');?>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

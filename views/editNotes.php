@@ -1,9 +1,9 @@
 <?php 
+    require_once 'C:\xampp\htdocs\Sistema-Universitario\model\Session.php';
+    
+    Session::startSession();
+    
     define('BASE_URL', '/Sistema-Universitario/');
-
-    if (session_status() !== PHP_SESSION_ACTIVE) {
-        session_start();
-    }
 
     if(!isset($_SESSION['logged-in-teacher']) || empty($_SESSION['logged-in-teacher']) || !isset($_SESSION['rol']) || empty($_SESSION['rol'])){
         if(!$_SESSION['logged-in-teacher'] || $_SESSION['rol'] !== 'profesor'){
@@ -28,7 +28,7 @@
             <h1>DOCENTES</h1>
             
         </div>
-        <a class="button-logout" href="views/templates/logout.php">Cerrar Sesión</a>
+        <a class="button-logout" href="<?= BASE_URL?>views/templates/logout.php">Cerrar Sesión</a>
     </header>
 
     <!--CONTENIDO-->
