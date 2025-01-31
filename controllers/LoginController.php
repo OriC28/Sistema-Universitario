@@ -2,6 +2,9 @@
 
 require_once "model/UserModel.php";
 require_once 'model/ErrorMessages.php';
+require_once 'model/Session.php';
+
+Session::startSession();
 
 class LoginController extends RegisterController{
     private $model;
