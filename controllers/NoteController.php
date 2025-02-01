@@ -9,9 +9,12 @@
 *
 */
 
-include('./model/NoteModel.php');
+require_once './model/NoteModel.php';
+require_once './model/User.php';
 
-session_start();
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
 
 /**
 * Controlador conectado al modelo NoteModel para establecer y actualizar las notas de un estudiante seleccionado por el docente.
@@ -71,7 +74,7 @@ class NoteController{
     public function setNotes():void{
         try{
             $notes = $this->get_notes_array();
-            $cedula_validated = $this->notes_user->validateCedula($this->cedula);
+            $cedula_validated = User::validateCedula($this->cedula);
             if($cedula_validated){
                 $this->notes_user->setNotes($cedula_validated, $notes);
             }
@@ -88,7 +91,7 @@ class NoteController{
     public function updateNotes():void{
         try{
             $notes = $this->get_notes_array();
-            $cedula_validated = $this->notes_user->validateCedula($this->cedula);
+            $cedula_validated = User::validateCedula($this->cedula);
             if($cedula_validated){
                 $this->notes_user->updateNotes($cedula_validated, $notes);
             }

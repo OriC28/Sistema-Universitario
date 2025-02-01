@@ -1,16 +1,16 @@
-<?php
+<?php 
     require_once 'C:\xampp\htdocs\Sistema-Universitario\model\ErrorMessages.php';
     require_once 'C:\xampp\htdocs\Sistema-Universitario\model\Session.php';
     
     Session::startSession();
-
+    
     define('BASE_URL', '/Sistema-Universitario/');
     header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
     header("Cache-Control: post-check=0, pre-check=0", false);
     header("Pragma: no-cache");
 
-    if(isset($_SESSION['cedula'])){
-        header("Location: " . BASE_URL . "index.php?controller=table&action=mainTeacher");
+    if(!isset($_SESSION["changePasswordData"]) || !$_SESSION["stepReady"]){
+        header("Location: changePasswordStep1.php");
         exit();
     }
 ?>
@@ -20,32 +20,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/login-register.css?v=<?php echo time(); ?>" />
-    <title>Iniciar Sesión</title>
+    <title>Cambiar contraseña</title>
 </head>
 <body class="responsive">
     <header class="header">
-        <h1>Iniciar Sesión</h1>
+        <h1>Establecer contraseña nueva</h1>
     </header>
     <main>
         <div class="container">
-            <h2>Docente</h2>
-            <form action="<?= BASE_URL ?>index.php?controller=login&action=loginTeacher" method="post">
-                <label for="email">Cédula</label>
-                <div class="div-input-email">
-                    <span><img src="<?= BASE_URL ?>assets\icons\user.png" alt="icon-user"/></span>
-                    <input class="input-login" type="text" name="cedula" placeholder="Ej: 27980416" required autocomplete="off">
-                </div>
-                
-                <label for="password">Contraseña</label>
+            <form action="<?= BASE_URL ?>index.php?controller=changePassword&action=changePasswordStep3" method="post">
+                <label for="">Contraseña nueva</label>
                 <div class="div-input-password">
                     <span><img src="<?= BASE_URL ?>assets\icons\password.png" alt="icon-password"/></span>
-                    <input class="input-login" type="password" name="password" placeholder="Ingresa tu contraseña" required autocomplete="off">
+                    <input class="input-signup" type="text" name="new-password" id="" autocomplete="off">
                 </div>
-
-                <?php ErrorMessages::showErrors('loginErrors'); ?>
-
+                    
+                <label for="">Confirmar contraseña</label>
+                <div class="div-input-password">
+                    <span><img src="<?= BASE_URL ?>assets\icons\password.png" alt="icon-password"/></span>
+                    <input class="input-signup" type="text" name="password" id="" autocomplete="off">
+                </div>
+                <?php ErrorMessages::showErrors('changePasswordErrors'); ?>
                 <div class="center-button2">
-                    <input type="submit" class="button-styles" name="submit" value="Iniciar sesión">
+                    <input class="button-styles" type="submit" name="submit" value="Confirmar">
                 </div>
             </form>
         </div>
@@ -55,4 +52,3 @@
     </footer>
 </body>
 </html>
-

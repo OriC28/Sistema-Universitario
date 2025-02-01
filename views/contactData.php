@@ -1,6 +1,26 @@
+<?php
+    require_once 'C:\xampp\htdocs\Sistema-Universitario\model\Session.php';
+    
+    Session::startSession();
+    
+    define('BASE_URL', '/Sistema-Universitario/');
+
+    $access = false;
+
+    if((isset($_SESSION['logged-in-student']) || !empty($_SESSION['logged-in-student'])) && (isset($_SESSION['rol']) || !empty($_SESSION['rol']))){
+        if($_SESSION['logged-in-student'] && $_SESSION['rol'] === 'estudiante'){
+            $access = true;
+        }
+    }
+    if(!$access){
+        http_response_code(403);
+        echo "Acceso denegado (Error 403).";
+        exit();
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="es">
-<?php define('BASE_URL', '/Sistema-Universitario/');?>
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,7 +31,7 @@
 <body>
     <header>
         <h1>ESTUDIANTES</h1>
-        <input class="button-logout" type="button" value="Cerrar Sesión">
+        <a class="button-logout" href="<?= BASE_URL?>views/templates/logout.php">Cerrar Sesión</a>
     </header>
     <!-- MENÚ -->
     <aside>

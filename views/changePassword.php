@@ -31,7 +31,7 @@
         </div>
     </main>
     <footer>
-        <p>copinai</p>
+        <p>Copyright 2024 - Hecho por la demencia</p>
     </footer>
 </body>
 </html>

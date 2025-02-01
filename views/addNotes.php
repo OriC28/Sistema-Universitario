@@ -1,3 +1,18 @@
+<?php
+    require_once 'C:\xampp\htdocs\Sistema-Universitario\model\Session.php';
+    require_once 'C:\xampp\htdocs\Sistema-Universitario\views\templates\sanitizeFile.php';
+
+    Session::startSession();
+    
+    define('BASE_URL', '/Sistema-Universitario/');
+
+    if(!isset($_SESSION['logged-in-teacher']) || empty($_SESSION['logged-in-teacher']) || !isset($_SESSION['rol']) || empty($_SESSION['rol'])){
+        if(!$_SESSION['logged-in-teacher'] || $_SESSION['rol'] !== 'profesor'){
+            http_response_code(403);
+            throw new Exception("Acceso denegado (Error 403).", 1);
+        }
+    }
+?>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -14,7 +29,7 @@
             <h1>DOCENTES</>
             
         </div>
-        <input class="button-logout" type="button" value="Cerrar Sesión">
+        <a class="button-logout" href="views/templates/logout.php">Cerrar Sesión</a>
     </header>
     <!--CONTENIDO-->
     <main>
@@ -25,12 +40,12 @@
 
         <!--DATOS DE LA MATERIA Y DOCENTE-->
         <div class="container-subject">
-            <h3>Materia: <?= htmlspecialchars($subject);?></h3>
-            <h3>Docente: <?=htmlspecialchars($teacher_name);?></h3>
+            <h3>Materia: <?= sanitizeData($subject);?></h3>
+            <h3>Docente: <?=sanitizeData($teacher_name);?></h3>
         </div>
         <!--INGRESO DE LAS NOTAS POR CORTE-->
         <div class="container-form">
-            <form action="index.php?controller=note&action=setNotes" method="post">
+            <form action="<?=BASE_URL?>index.php?controller=note&action=setNotes" method="post">
                 <div class="container-notes">
                     <!--CORTES-->
                     <div class="field">

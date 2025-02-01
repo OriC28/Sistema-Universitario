@@ -14,22 +14,14 @@ require_once './model/TableModel.php';
 * la vista principal del docente en formato de tabla.
 *
 */
-class tableController{
-    /**
-    * Llama al método getAllStudents();
-    *
-    * @return void 
-    */
-    public function mainTeacher(): void{
-        $this->getAllStudents();
-    }
+class TableController{
     /**
     * Llama al método getAllStudents() dentro del modelo TableModel para luego incluir la vista mainTeacher.php en donde se
     * utilizarán los datos del arreglo $students.
     *
     * @return string string desencriptado
     */
-    public function getAllStudents(): void{
+    public function mainTeacher(): void{
         $model_students = new TableModel();
         $students = $model_students->getAllStudents();
         require_once 'views/mainTeacher.php';

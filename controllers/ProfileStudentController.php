@@ -1,6 +1,5 @@
 <?php
 
-
 require_once './model/ProfileStudentModel.php';
 require_once './model/NoteModel.php';
 require_once 'ViewerNoteController.php';
@@ -15,10 +14,9 @@ class ProfileStudentController extends ViewerNoteController{
      */
     public function getStudentData(){
         try{
-            $modelObject = new NoteModel();
             $modelStudentData = new ProfileStudentModel();
 
-            $cedulaValidated = $this->existsStudentInSession($modelObject);
+            $cedulaValidated = $this->existsStudentInSession();
 
             $data = $modelStudentData->getStudentData($cedulaValidated);
         
@@ -26,7 +24,5 @@ class ProfileStudentController extends ViewerNoteController{
         }catch (\Throwable $th) {
             echo $th->getMessage();
         }
-        
-
     }
 }

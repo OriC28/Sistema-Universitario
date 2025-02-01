@@ -1,6 +1,8 @@
+<?php require_once 'sanitizeFile.php' ?>
+
 <div class="student-data">
     <div class="container-name">
-        <h1><?php echo $name; ?></h1>
+        <h1><?php echo sanitizeData($name); ?></h1>
     </div>
-    <h3 id="cedula">V-<?php echo $cedula; ?></h3>
+    <h2 id="cedula">V-<?php echo sanitizeData($cedula); ?></h2>
 </div>

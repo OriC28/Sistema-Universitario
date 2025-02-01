@@ -168,21 +168,29 @@ aside{
     display: grid;
     
 }
-/* BOTONES DE LOGOUT */
+
 .button-logout{
-    font-size: 15px;
+    display: grid;
+    justify-content: center;
+    background-color: #fff;
     border-radius: 30px;
     padding: 5px;
-    width: 150px;
-    margin: 20px;
+    width: 145px;
+    margin: 15px;
     border-color: transparent;
+    #logout{
+        text-decoration: none;
+        color: #243C60;
+        font-size: 14px;
+        cursor: pointer;
+        font-weight: 500;
+    }
 }
 /* ANIMACION DEL BOTON DE LOGOUT */
 .button-logout:hover{
     cursor: pointer;
     background-color:#C4CBD3;
 }
-
 /* INPUTS EN LA VISTA DE LOS DATOS DE CONTACTO */
 .inputs-personal-data{
     border-radius: 5px;

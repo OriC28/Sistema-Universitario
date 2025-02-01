@@ -14,7 +14,9 @@
 */
 
 require_once "./model/NoteModel.php";
+require_once "./model/User.php";
 require_once "./model/TeacherDataModel.php";
+
 
 class ViewerNoteController{
     /**
@@ -23,12 +25,13 @@ class ViewerNoteController{
     * @return int identificador único del estudiante validado
     * @param NoteModel instancia del modelo NoteModel
     */
-    public function existsStudentInSession(NoteModel $modelObject): int {
-        $cedula = htmlspecialchars($_SESSION['cedula']);
-        if(!$cedula){
-            throw new Exception("Usuario fuera de sesión.", 1);
+    public function existsStudentInSession(): int {
+        if(!isset($_SESSION['cedula']) || empty($_SESSION['cedula'])){
+            http_response_code(403);
+            throw new Exception("Acceso denegado (Error 403).", 1);
         }
-        return $modelObject->validateCedula($cedula);
+        $cedula = htmlspecialchars($_SESSION['cedula']);
+        return User::validateCedula($cedula);
     }
     /**
     * Llama al método existsStudentInSession() y emplea el método getNotes() dentro del modelo NoteModel para obtener las notas
@@ -39,7 +42,7 @@ class ViewerNoteController{
     public function viewNotes(): void{
         try{
             $model = new NoteModel();
-            $cedula = $this->existsStudentInSession($model);
+            $cedula = $this->existsStudentInSession();
             $notes = $model->getNotes($cedula);
 
             # DATOS DEL DOCENTE Y NOMBRE DE LA MATERIA

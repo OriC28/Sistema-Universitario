@@ -12,6 +12,8 @@
 
 require_once "./model/NoteModel.php";
 require_once "./model/TeacherDataModel.php";
+require_once "./model/Session.php";
+require_once "./model/User.php";
 
 /**
 * Controlador conectado al modelo NoteModel. Permite cargar los datos (cédula, nombre y las notas) 
@@ -37,9 +39,10 @@ class StudentDataController{
     * @return boolean true si los parámetros existen
     * @param array $parameters parametros pasados por la URL
     */
-    private function validateGETParameters(array $parameters): bool{
+    #valida
+    private function validateGETParameters(array $parameters): bool{ 
         foreach ($parameters as $param){
-            if(!isset($_GET[$param]) && empty($_GET[$param])){
+            if(!isset($_GET[$param]) || empty($_GET[$param])){
                 return false;
             }
         }
@@ -53,11 +56,9 @@ class StudentDataController{
     * @param string $name nombre completo del estudiante
     */
     private function setSessionData(string $cedula, string $name): void {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-        $_SESSION['cedula'] = $cedula;
-        $_SESSION['name'] = $name;
+        Session::startSession();
+        Session::set('cedula', $cedula);
+        Session::set('name', $name);
     }
     /**
     * Valida todos los datos recibidos (cedula, name y site) por la URL.
@@ -78,9 +79,9 @@ class StudentDataController{
         }
         $notes_user = new NoteModel();
 
-        $cedula_validated = $notes_user->validateCedula($cedula);
+        $cedula_validated = User::validateCedula($cedula);
 
-        if(!$notes_user->existsCedula($cedula_validated, 'estudiantes')){
+        if(!$notes_user->existsCedula($cedula_validated, true)){
             throw new Exception("La cédula no es válida.", 1);
         }
         $name = trim(htmlspecialchars($name));
@@ -127,7 +128,7 @@ class StudentDataController{
         $teacher_name = $teacherModel->getTeacherName();
         
         if($site_redirect == "editnotes"){
-            $notes = $notes_user->getNotes($cedula);
+            $notes = $notes_user->getNotes($cedula); 
             require_once "views/editNotes.php";
             require_once "views/templates/sub_header.php";
 
@@ -149,19 +150,20 @@ class StudentDataController{
     */
     public function getRowData(): void{
         try{
-            if(!$this->validateGETParameters(['id', 'n', 'site'])){
-                header("Location: index.php?controller=table&action=mainTeacher");
-                exit();
-            }
-            $data = $this->validateDecryptData();
-            if($data){
-                # DATOS
-                $cedula = $data['cedula'];
-                $name = $data['name'];
-                $site_redirect = $data['site'];
-                $notes_user = $data['noteModelObject'];
+            if($this->validateGETParameters(['id', 'n', 'site'])){
 
-                $this->setRedirectToView($cedula, $name, $site_redirect, $notes_user);
+                $data = $this->validateDecryptData();
+                if($data){
+                    # DATOS
+                    $cedula = $data['cedula'];
+                    $name = $data['name'];
+                    $site_redirect = $data['site'];
+                    $notes_user = $data['noteModelObject'];
+
+                    $this->setRedirectToView($cedula, $name, $site_redirect, $notes_user);
+                }
+            }else{
+                throw new Exception("Ha ocurrido un error con la ruta.");
             }
         }catch(\Throwable $th){
             die($th->getMessage());

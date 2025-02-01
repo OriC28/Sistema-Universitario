@@ -1,6 +1,25 @@
+<?php
+    require_once 'C:\xampp\htdocs\Sistema-Universitario\model\Session.php';
+    require_once 'C:\xampp\htdocs\Sistema-Universitario\views\templates\sanitizeFile.php';
+    
+    Session::startSession();
+    
+    define('BASE_URL', '/Sistema-Universitario/');
+    $access = false;
+
+    if((isset($_SESSION['logged-in-student']) || !empty($_SESSION['logged-in-student'])) && (isset($_SESSION['rol']) || !empty($_SESSION['rol']))){
+        if($_SESSION['logged-in-student'] && $_SESSION['rol'] === 'estudiante'){
+            $access = true;
+        }
+    }
+    if(!$access){
+        http_response_code(403);
+        echo "Acceso denegado (Error 403).";
+        exit();
+    }
+?>
 <!DOCTYPE html>
 <html lang="es">
-<?php define('BASE_URL', '/Sistema-Universitario/');?>
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,7 +30,8 @@
 <body>
     <header>
         <h1>ESTUDIANTES</h1>
-        <input class="button-logout" type="button" value="Cerrar Sesión">
+        
+        <a class="button-logout" href="views/templates/logout.php">Cerrar Sesión</a>
     </header>
 
     <!-- MENÚ -->
@@ -45,10 +65,10 @@
                 <div class="name">
                     <h2>
                         <?= 
-                            htmlspecialchars($data['primer_nombre_estudiante']).
-                        " ".htmlspecialchars($data['segundo_nombre_estudiante']).
-                        " ".htmlspecialchars($data['primer_apellido_estudiante']).
-                        " ".htmlspecialchars($data['segundo_apellido_estudiante']);
+                            sanitizeData($data['primer_nombre_estudiante']).
+                        " ".sanitizeData($data['segundo_nombre_estudiante']).
+                        " ".sanitizeData($data['primer_apellido_estudiante']).
+                        " ".sanitizeData($data['segundo_apellido_estudiante']);
                         ?>
                     </h2>
                 </div>
@@ -59,15 +79,15 @@
             <!-- BLOQUE BLANCO CON SU RESPECTIVO CONTENIDO -->
             <div class="div-white">
                 <div class="data"> 
-                    <h3>Cédula:</h3><label for=""><?= htmlspecialchars($data['cedula']); ?></label>
+                    <h3>Cédula:</h3><label for=""><?= $data['cedula'] != null ? sanitizeData($data['cedula']): ''; ?></label>
                 </div>
                 <div class="data"> 
-                    <h3>Teléfono:</h3><label for=""><?= htmlspecialchars($data['telefono']);?></label>
+                    <h3>Teléfono:</h3><label for=""><?= $data['telefono'] != null ? sanitizeData($data['telefono']): '';?></label>
                 </div>
                 <div class="data"> 
                     <h3>Correo electrónico:</h3>
                     <label for="">
-                        <?= htmlspecialchars($data['correo_electronico']);?>
+                        <?= $data['correo_electronico'] != null ? sanitizeData($data['correo_electronico']): '';?>
                     </label>
                 </div>
             </div>

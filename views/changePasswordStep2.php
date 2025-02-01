@@ -1,19 +1,22 @@
-<?php
+<?php 
+    require_once 'C:\xampp\htdocs\Sistema-Universitario\model\ErrorMessages.php';
     require_once 'C:\xampp\htdocs\Sistema-Universitario\model\Session.php';
     
     Session::startSession();
-
+    
     define('BASE_URL', '/Sistema-Universitario/');
     header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
     header("Cache-Control: post-check=0, pre-check=0", false);
     header("Pragma: no-cache");
 
-    if(!isset($_SESSION["userSignupData"])){
-        header("Location: loginStudent.php");
+    if (isset($_SESSION["stepReady"])) {
+        unset($_SESSION["stepReady"]);
+    }
+    
+    if(!isset($_SESSION["changePasswordData"])){
+        header("Location: changePasswordStep1.php");
         exit();
     }
-
-    require_once 'C:\xampp\htdocs\Sistema-Universitario\model\ErrorMessages.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -21,15 +24,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/login-register.css?v=<?php echo time(); ?>" />
-    <title>Preguntas de seguridad</title>
+    <title>Cambiar contraseña</title>
 </head>
 <body class="responsive">
     <header class="header">
-        <h1>Preguntas de Seguridad</h1>
+        <h1>Preguntas de Seguridad (1/2)</h1>
     </header>
     <main>
         <div class="container">
-            <form class="form-recovery" action="<?= BASE_URL ?>index.php?controller=register&action=finishSignUp" method="post">
+            <form class="form-recovery" action="<?= BASE_URL?>index.php?controller=changePassword&action=changePasswordStep2" method="post">
                 <div class="div-recovery-password">
                 <label for="question1">Pregunta 1</label>
                     <input class="input-recovery" type="text" name="primera-pregunta" placeholder="¿Cuál es mi color favorito?" required autocomplete="off">
@@ -50,9 +53,9 @@
                     <label for="answer3">Respuesta 3</label>
                     <input class="input-recovery" type="text" name="tercera-respuesta" placeholder="Mi Casa" required autocomplete="off">
                 </div>
-                <?php ErrorMessages::showErrors("signupErrors"); ?>
+                <?php ErrorMessages::showErrors('changePasswordErrors'); ?>
                 <div class="center-button2">
-                    <input type="submit" class="button-styles" name="submit" value="Aceptar">
+                    <input type="submit" class="button-styles" name="submit" value="Siguiente">
                 </div>
             </form>
         </div>

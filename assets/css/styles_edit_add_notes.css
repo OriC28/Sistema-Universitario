@@ -37,17 +37,25 @@ input{
 .container-admin>label{
     font-size: 20px;
 }
-
-/*BOTÓN PARA CERRAR SESIÓN*/
+a{
+    text-decoration: none;
+    color: #243C60;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+}
 .button-logout{
-    font-size: 15px;
+    display: grid;
+    justify-items: center;
+    background-color: #fff;
     border-radius: 30px;
     padding: 5px;
-    width: 150px;
-    margin: 20px;
+    width: 145px;
+    margin: 15px;
     border-color: transparent;
+    
 }
-/*ANIMACIÓN PARA EL BOTÓN DE CERRAR SESIÓN*/
+/* ANIMACION DEL BOTON DE LOGOUT */
 .button-logout:hover{
     cursor: pointer;
     background-color:#C4CBD3;
@@ -136,7 +144,7 @@ form{
 /*CONTENEDOR INDIVIDUAL PARA CADA CORTE*/
 .field{
     display: flex;
-    margin: 5px;
+
     font-size: 15px;
     flex-direction: row;
     align-items: center;
@@ -202,4 +210,8 @@ footer{
     width: 80px;
     height: 30px;
     background-color: #ddffdd;
+}
+
+.not-students{
+    text-align: center;
 }

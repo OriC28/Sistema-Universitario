@@ -3,8 +3,8 @@
 * Inclusión de todos los controladores 
 *
 */
-#include("controllers/UserController (prueba inicial).php");
-#include("controllers/TeacherController (prueba inicial).php");
+include("controllers/RegisterController.php");
+include("controllers/LoginController.php");
 include("controllers/NoteController.php");
 include("controllers/TableController.php");
 include("controllers/TeacherMethodController.php");
@@ -13,10 +13,10 @@ include("controllers/ProfileStudentController.php");
 include("controllers/ContactDataController.php");
 
 try{
-    $error_message = "Error 404. Ruta no encontrada.";
+    $error_message = 'Ruta no encontrada (Error 404)';
 
     # Verificar si se han enviado los parámetros controller y action por la URL
-    if(!isset($_GET['controller']) || !isset($_GET['action']) && empty($_GET['controller']) || empty($_GET['action'])){
+    if((!isset($_GET['controller']) || !isset($_GET['action'])) && (empty($_GET['controller']) || empty($_GET['action']))){
         http_response_code(404);
         throw new Exception($error_message, 1);
     }
