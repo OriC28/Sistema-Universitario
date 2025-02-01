@@ -32,13 +32,13 @@
                 <label for="">Contraseña nueva</label>
                 <div class="div-input-password">
                     <span><img src="<?= BASE_URL ?>assets\icons\password.png" alt="icon-password"/></span>
-                    <input class="input-signup" type="text" name="new-password" id="" autocomplete="off">
+                    <input class="input-signup" type="password" name="new-password" id="" autocomplete="off">
                 </div>
                     
                 <label for="">Confirmar contraseña</label>
                 <div class="div-input-password">
                     <span><img src="<?= BASE_URL ?>assets\icons\password.png" alt="icon-password"/></span>
-                    <input class="input-signup" type="text" name="password" id="" autocomplete="off">
+                    <input class="input-signup" type="password" name="password" id="" autocomplete="off">
                 </div>
                 <?php ErrorMessages::showErrors('changePasswordErrors'); ?>
                 <div class="center-button2">
